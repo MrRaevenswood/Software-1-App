@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="23.0" layoutY="30.0" text="Add Part" textFill="#011d8d">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="rb_InHouseAddPart" layoutX="183.0" layoutY="33.0" mnemonicParsing="false" text="In-House" />
+      <RadioButton fx:id="rb_OutsourcedAddPart" layoutX="334.0" layoutY="33.0" mnemonicParsing="false" text="Outsourced" />
+      <TextField fx:id="txt_PartNameAddPart" layoutX="223.0" layoutY="125.0" promptText="Part Name" />
+      <TextField fx:id="txt_InvAddPart" layoutX="223.0" layoutY="170.0" promptText="Inv" />
+      <TextField fx:id="txt_PriceCostAddPart" layoutX="223.0" layoutY="215.0" promptText="Price/Cost" />
+      <TextField fx:id="txt_MaxAddPart" layoutX="223.0" layoutY="260.0" prefHeight="27.0" prefWidth="120.0" promptText="Max" />
+      <TextField fx:id="txt_MinAddPart" layoutX="429.0" layoutY="260.0" prefHeight="27.0" prefWidth="95.0" promptText="Min" />
+      <TextField fx:id="txt_CompanyNameAddPart" layoutX="223.0" layoutY="308.0" prefHeight="27.0" prefWidth="141.0" promptText="Comp Nm" />
+      <TextField fx:id="txt_IdAddPart" disable="true" layoutX="223.0" layoutY="78.0" promptText="Auto Gen - Disabled" />
+      <Button fx:id="btn_AddPartSaveAddPart" layoutX="412.0" layoutY="366.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="btn_AddPartCancelAddPart" layoutX="495.0" layoutY="366.0" mnemonicParsing="false" text="Cancel" />
+      <Label layoutX="115.0" layoutY="83.0" prefHeight="17.0" prefWidth="22.0" text="ID" />
+      <Label layoutX="116.0" layoutY="130.0" text="Name" />
+      <Label layoutX="115.0" layoutY="220.0" text="Price/Cost" />
+      <Label layoutX="114.0" layoutY="175.0" prefHeight="17.0" prefWidth="40.0" text="Inv" />
+      <Label layoutX="113.0" layoutY="265.0" text="Max" />
+      <Label layoutX="373.0" layoutY="265.0" text="Min" />
+      <Label layoutX="113.0" layoutY="313.0" text="Company Name" />
+   </children>
+</Pane>
