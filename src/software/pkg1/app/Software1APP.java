@@ -14,11 +14,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
+import software.pkg1.app.*;
+
 /**
  *
  * @author rodrigmi
  */
 public class Software1APP extends Application {
+    
+    public Inventory myStock = new Inventory();
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -30,11 +34,20 @@ public class Software1APP extends Application {
         stage.show();       
     }
     
+    public void addProduct(Product newProduct){
+        myStock.addProduct(newProduct);
+    }
+    
+    public void addPart(Part newPart){
+        myStock.addPart(newPart);
+    }
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
+          
     }
     
 }
