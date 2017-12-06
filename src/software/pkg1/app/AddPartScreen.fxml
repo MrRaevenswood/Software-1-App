@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Label layoutX="23.0" layoutY="30.0" text="Add Part" textFill="#011d8d">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <RadioButton fx:id="rb_InHouseAddPart" layoutX="183.0" layoutY="33.0" mnemonicParsing="false" text="In-House" />
+      <RadioButton fx:id="rb_InHouseAddPart" layoutX="183.0" layoutY="33.0" mnemonicParsing="false" selected="true" text="In-House" />
       <RadioButton fx:id="rb_OutsourcedAddPart" layoutX="334.0" layoutY="33.0" mnemonicParsing="false" text="Outsourced" />
       <TextField fx:id="txt_PartNameAddPart" layoutX="223.0" layoutY="125.0" promptText="Part Name" />
       <TextField fx:id="txt_InvAddPart" layoutX="223.0" layoutY="170.0" promptText="Inv" />
@@ -23,7 +23,7 @@
       <TextField fx:id="txt_MinAddPart" layoutX="429.0" layoutY="260.0" prefHeight="27.0" prefWidth="95.0" promptText="Min" />
       <TextField fx:id="txt_CompanyNameAddPart" layoutX="223.0" layoutY="308.0" prefHeight="27.0" prefWidth="141.0" promptText="Comp Nm" />
       <TextField fx:id="txt_IdAddPart" disable="true" layoutX="223.0" layoutY="78.0" promptText="Auto Gen - Disabled" />
-      <Button fx:id="btn_AddPartSaveAddPart" layoutX="412.0" layoutY="366.0" mnemonicParsing="false" text="Save" />
+      <Button fx:id="btn_AddPartSaveAddPart" layoutX="412.0" layoutY="366.0" mnemonicParsing="false" onAction="#addPart" text="Save" />
       <Button fx:id="btn_AddPartCancelAddPart" layoutX="495.0" layoutY="366.0" mnemonicParsing="false" text="Cancel" />
       <Label layoutX="115.0" layoutY="83.0" prefHeight="17.0" prefWidth="22.0" text="ID" />
       <Label layoutX="116.0" layoutY="130.0" text="Name" />
