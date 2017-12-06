@@ -5,6 +5,7 @@
  */
 package software.pkg1.app;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +23,7 @@ import software.pkg1.app.*;
  */
 public class Software1APP extends Application {
     
-    public Inventory myStock = new Inventory();
+    public static Inventory myStock = new Inventory();
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -34,12 +35,16 @@ public class Software1APP extends Application {
         stage.show();       
     }
     
-    public void addProduct(Product newProduct){
+    public static void addProduct(Product newProduct){
         myStock.addProduct(newProduct);
     }
     
-    public void addPart(Part newPart){
+    public static void addPart(Part newPart){
         myStock.addPart(newPart);
+    }
+    
+    public static ArrayList<Part> getParts(){
+        return myStock.getAllParts();
     }
     
     /**
