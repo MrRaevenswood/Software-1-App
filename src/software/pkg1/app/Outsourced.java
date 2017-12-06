@@ -22,61 +22,61 @@ public class Outsourced extends Part {
 
     @Override
     void setName(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.name = name; 
     }
 
     @Override
     String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.name;
     }
 
     @Override
     void setPrice(double price) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.price = price;
     }
 
     @Override
     double getPrice() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.price;
     }
 
     @Override
     void setInStock(int amtInStock) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.inStock = amtInStock;
     }
 
     @Override
     int getInStock() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.inStock;
     }
 
     @Override
     void setMin(int min) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.min = min;
     }
 
     @Override
     int getMin() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.min;
     }
 
     @Override
     void setMax(int max) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.max = max;
     }
 
     @Override
     int getMax() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.max;
     }
 
     @Override
     void setPartID(int partId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.partID = partID;
     }
 
     @Override
     int getPartID() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       return this.partID; 
     }
 }
