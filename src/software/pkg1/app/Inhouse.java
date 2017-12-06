@@ -9,14 +9,76 @@ package software.pkg1.app;
  *
  * @author rodrigmi
  */
-public abstract class Inhouse extends Part {
-    private String companyName;
+public class Inhouse extends Part {
+    private int machineID;
     
-    public String getCompanyName(){
-        return this.companyName;
+    public void setMachineID (int ID){
+        this.machineID = ID;
     }
     
-    public void setCompanyName(String companyName){
-        this.companyName = companyName;
+    public int getMachineID (){
+        return this.machineID;
+    }
+    
+    
+
+    @Override
+    void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    String getName() {
+        return this.name;
+    }
+
+    @Override
+    void setPrice(double price) {
+        this.price = price;
+    }
+
+    @Override
+    double getPrice() {
+        return this.price;
+    }
+
+    @Override
+    void setInStock(int amtInStock) {
+        this.inStock = amtInStock;
+    }
+
+    @Override
+    int getInStock() {
+        return this.inStock;
+    }
+
+    @Override
+    void setMin(int min) {
+        this.min = min;
+    }
+
+    @Override
+    int getMin() {
+        return this.min;
+    }
+
+    @Override
+    void setMax(int max) {
+        this.max = max;
+    }
+
+    @Override
+    int getMax() {
+        return this.max;
+    }
+
+    @Override
+    void setPartID(int partId) {
+        this.partID = partId;
+    }
+
+    @Override
+    int getPartID() {
+        return this.partID;
     }
 }
