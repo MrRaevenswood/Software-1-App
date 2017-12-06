@@ -77,4 +77,8 @@ public class Inventory {
     {
         
     }
+    
+    public ArrayList<Part> getAllParts(){
+        return allparts;
+    }
 }
