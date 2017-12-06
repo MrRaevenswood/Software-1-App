@@ -10,12 +10,12 @@ package software.pkg1.app;
  * @author rodrigmi
  */
 public abstract class Part {
-    private int partID;
-    private String name; 
-    private double price;
-    private int inStock;
-    private int min;
-    private int max;
+    protected int partID;
+    protected String name; 
+    protected double price;
+    protected int inStock;
+    protected int min;
+    protected int max;
     
     abstract void setName(String name);
     abstract String getName();
