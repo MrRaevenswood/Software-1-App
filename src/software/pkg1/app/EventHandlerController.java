@@ -6,7 +6,10 @@
 package software.pkg1.app;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +17,7 @@ import javafx.scene.*;
 import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 
 import software.pkg1.app.Software1APP;
 
@@ -32,14 +36,18 @@ public class EventHandlerController {
     @FXML
     private TableColumn coln_PRICEPERUNIT;
     @FXML
-    private TableColumn coln_PARTID;
+    private TableColumn<Part, Integer> coln_PARTID;
     @FXML
-    private TableColumn coln_PARTNAME;
+    private TableColumn<Part, String> coln_PARTNAME;
     @FXML
-    private TableColumn coln_INVENTORYLEVELPARTS;
+    private TableColumn<Part, Integer> coln_INVENTORYLEVELPARTS;
     @FXML
-    private TableColumn coln_PRICECOSTPERUNIT;
+    private TableColumn<Part, Double>coln_PRICECOSTPERUNIT;
+    @FXML
+    private TableView<Part> tbl_PARTS;
     
+    
+
     
     //Main Screen Event Handler Methods
     @FXML
@@ -76,9 +84,14 @@ public class EventHandlerController {
    
    @FXML
    public void populatePartsTable(){
-       for(Part p : Software1APP.getParts()){
-           coln_PARTID.setText(String.valueOf(p.getPartID()));
-       }
+     ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
+     
+     coln_PARTID.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_PARTID"));
+     coln_PARTNAME.setCellValueFactory(new PropertyValueFactory<Part, String>("coln_PARTNAME"));
+     coln_INVENTORYLEVELPARTS.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_INVENTORYLEVELPARTS"));
+     coln_PRICECOSTPERUNIT.setCellValueFactory(new PropertyValueFactory<Part, Double>("coln_PRICECOSTPERUNIT"));
+     
+     tbl_PARTS.setItems(list);
    }
    
    @FXML
@@ -139,11 +152,14 @@ public class EventHandlerController {
            
            Software1APP.addPart(newOutPart);
         }
-      
-       Platform.exit();
-       
+ 
+       Stage stage = (Stage) btn_AddPartSaveAddPart.getScene().getWindow();
+       stage.close();
+                   
             
    }
+   
+   
   
    
 }
