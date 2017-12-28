@@ -20,7 +20,7 @@ public class Inventory {
         this.products = new ArrayList();
         this.allparts = new ArrayList();
     }
-    
+ 
     public void addProduct(Product product)
     {
         products.add(product);
