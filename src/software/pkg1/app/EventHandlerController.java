@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import static java.util.Collections.list;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,6 +30,7 @@ import software.pkg1.app.Software1APP;
  * @author rodrigmi
  */
 public class EventHandlerController {
+    
     //Main Screen Variables
     @FXML
     private TableColumn coln_PRODUCT_ID;
@@ -45,8 +49,31 @@ public class EventHandlerController {
     @FXML
     private TableColumn<Part, Double>coln_PRICECOSTPERUNIT;
     @FXML
-    private TableView<Part> tbl_PARTS;
+    private TableView<Inventory> tbl_PARTS;
     
+    //AddPartScreeen Variables
+   @FXML
+   private RadioButton rb_InHouseAddPart;
+   @FXML
+   private RadioButton rb_OutsourcedAddPart;
+   @FXML
+   private TextField txt_PartNameAddPart;
+   @FXML 
+   private TextField txt_InvAddPart;
+   @FXML
+   private TextField txt_PriceCostAddPart;
+   @FXML
+   private TextField txt_MaxAddPart;
+   @FXML
+   private TextField txt_MinAddPart;
+   @FXML
+   private TextField txt_CompanyNameAddPart;
+   @FXML
+   private TextField txt_IdAddPart;
+   @FXML
+   private Button btn_AddPartSaveAddPart;
+   @FXML
+   private Button btn_AddPartCancelAddPart;
     
 
     
@@ -86,41 +113,12 @@ public class EventHandlerController {
    @FXML
    public void populatePartsTable(){
     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
     
-    Inventory totalCurrentParts = new Inventory();
-    
-    for(Part p: Software1APP.getParts()){
-        if(p.getClass() == Outsourced.class)
-        {
-            Outsourced newTempPart = new Outsourced();
-            
-            newTempPart.setPartID(p.getPartID());
-            newTempPart.setName(p.getName());
-            newTempPart.setInStock(p.getInStock());
-            newTempPart.setPrice(p.getPrice());
-            
-            totalCurrentParts.addPart(newTempPart);
-        }
-        else{
-            Inhouse newTempPart = new Inhouse();
-            
-            newTempPart.setPartID(p.getPartID());
-            newTempPart.setName(p.getName());
-            newTempPart.setInStock(p.getInStock());
-            newTempPart.setPrice(p.getPrice());
-            
-            totalCurrentParts.addPart(newTempPart);
-        }
-     }
-    
-    ObservableList list = FXCollections.observableArrayList(totalCurrentParts.getAllParts());
-    
-    System.out.print(list.size());
-    
-     coln_PARTID.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_PARTID"));
-     coln_PARTNAME.setCellValueFactory(new PropertyValueFactory<Part, String>("coln_PARTNAME"));
-     coln_INVENTORYLEVELPARTS.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_INVENTORYLEVELPARTS"));
-     coln_PRICECOSTPERUNIT.setCellValueFactory(new PropertyValueFactory<Part, Double>("coln_PRICECOSTPERUNIT"));
+     coln_PARTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_PARTNAME.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_INVENTORYLEVELPARTS.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PRICECOSTPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
      tbl_PARTS.setItems(list);
    }
@@ -130,40 +128,27 @@ public class EventHandlerController {
        System.exit(0);
    }
    
-   //AddPartScreeen Variables
-   @FXML
-   private RadioButton rb_InHouseAddPart;
-   @FXML
-   private RadioButton rb_OutsourcedAddPart;
-   @FXML
-   private TextField txt_PartNameAddPart;
-   @FXML 
-   private TextField txt_InvAddPart;
-   @FXML
-   private TextField txt_PriceCostAddPart;
-   @FXML
-   private TextField txt_MaxAddPart;
-   @FXML
-   private TextField txt_MinAddPart;
-   @FXML
-   private TextField txt_CompanyNameAddPart;
-   @FXML
-   private TextField txt_IdAddPart;
-   @FXML
-   private Button btn_AddPartSaveAddPart;
-   @FXML
-   private Button btn_AddPartCancelAddPart;
+   
    
    
    //AddPartScreen events
    @FXML
    public void addPart(){
        
+       int id;
+       if(Software1APP.getParts().isEmpty())
+           id = 1;
+       else
+           id = Software1APP.getParts().size() + 1;
+       
+       System.out.print(id);
+       
        if(rb_InHouseAddPart.isSelected())
        {
            Inhouse newInPart = new Inhouse();
            
-           newInPart.setMachineID(Software1APP.getParts().size());
+           newInPart.setMachineID(id);
+           newInPart.setPartID(id);
            newInPart.setName(txt_PartNameAddPart.getText());
            newInPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
            newInPart.setPrice(Double.parseDouble(txt_PriceCostAddPart.getText()));
@@ -177,7 +162,7 @@ public class EventHandlerController {
            Outsourced newOutPart = new Outsourced();
            
            
-           newOutPart.setPartID(Software1APP.getParts().size());
+           newOutPart.setPartID(id);
            newOutPart.setName(txt_PartNameAddPart.getText());
            newOutPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
            newOutPart.setPrice(Double.parseDouble(txt_PriceCostAddPart.getText()));

@@ -4,18 +4,22 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="423.0" prefWidth="600.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Label layoutX="23.0" layoutY="30.0" text="Add Part" textFill="#011d8d">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <RadioButton fx:id="rb_InHouseAddPart" layoutX="183.0" layoutY="33.0" mnemonicParsing="false" selected="true" text="In-House" />
-      <RadioButton fx:id="rb_OutsourcedAddPart" layoutX="334.0" layoutY="33.0" mnemonicParsing="false" text="Outsourced" />
+      <RadioButton fx:id="rb_InHouseAddPart" layoutX="183.0" layoutY="33.0" mnemonicParsing="false" selected="true" text="In-House">
+         <toggleGroup>
+            <ToggleGroup fx:id="InOrOut" />
+         </toggleGroup></RadioButton>
+      <RadioButton fx:id="rb_OutsourcedAddPart" layoutX="334.0" layoutY="33.0" mnemonicParsing="false" text="Outsourced" toggleGroup="$InOrOut" />
       <TextField fx:id="txt_PartNameAddPart" layoutX="223.0" layoutY="125.0" promptText="Part Name" />
       <TextField fx:id="txt_InvAddPart" layoutX="223.0" layoutY="170.0" promptText="Inv" />
       <TextField fx:id="txt_PriceCostAddPart" layoutX="223.0" layoutY="215.0" promptText="Price/Cost" />

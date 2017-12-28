@@ -72,7 +72,7 @@ public class Outsourced extends Part {
 
     @Override
     void setPartID(int partId) {
-        this.partID = partID;
+        this.partID = partId;
     }
 
     @Override
