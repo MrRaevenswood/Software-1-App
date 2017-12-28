@@ -7,6 +7,7 @@ package software.pkg1.app;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import static java.util.Collections.list;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -84,8 +85,38 @@ public class EventHandlerController {
    
    @FXML
    public void populatePartsTable(){
-     ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
-     
+    
+    
+    Inventory totalCurrentParts = new Inventory();
+    
+    for(Part p: Software1APP.getParts()){
+        if(p.getClass() == Outsourced.class)
+        {
+            Outsourced newTempPart = new Outsourced();
+            
+            newTempPart.setPartID(p.getPartID());
+            newTempPart.setName(p.getName());
+            newTempPart.setInStock(p.getInStock());
+            newTempPart.setPrice(p.getPrice());
+            
+            totalCurrentParts.addPart(newTempPart);
+        }
+        else{
+            Inhouse newTempPart = new Inhouse();
+            
+            newTempPart.setPartID(p.getPartID());
+            newTempPart.setName(p.getName());
+            newTempPart.setInStock(p.getInStock());
+            newTempPart.setPrice(p.getPrice());
+            
+            totalCurrentParts.addPart(newTempPart);
+        }
+     }
+    
+    ObservableList list = FXCollections.observableArrayList(totalCurrentParts.getAllParts());
+    
+    System.out.print(list.size());
+    
      coln_PARTID.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_PARTID"));
      coln_PARTNAME.setCellValueFactory(new PropertyValueFactory<Part, String>("coln_PARTNAME"));
      coln_INVENTORYLEVELPARTS.setCellValueFactory(new PropertyValueFactory<Part, Integer>("coln_INVENTORYLEVELPARTS"));
@@ -120,6 +151,8 @@ public class EventHandlerController {
    private TextField txt_IdAddPart;
    @FXML
    private Button btn_AddPartSaveAddPart;
+   @FXML
+   private Button btn_AddPartCancelAddPart;
    
    
    //AddPartScreen events
@@ -130,9 +163,9 @@ public class EventHandlerController {
        {
            Inhouse newInPart = new Inhouse();
            
-           //newInPart.setMachineID(myStock.allParts.size());
+           newInPart.setMachineID(Software1APP.getParts().size());
            newInPart.setName(txt_PartNameAddPart.getText());
-           //newInPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
+           newInPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
            newInPart.setPrice(Double.parseDouble(txt_PriceCostAddPart.getText()));
            newInPart.setMax(Integer.parseInt(txt_MaxAddPart.getText()));
            newInPart.setMin(Integer.parseInt(txt_MinAddPart.getText()));
@@ -143,6 +176,8 @@ public class EventHandlerController {
            
            Outsourced newOutPart = new Outsourced();
            
+           
+           newOutPart.setPartID(Software1APP.getParts().size());
            newOutPart.setName(txt_PartNameAddPart.getText());
            newOutPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
            newOutPart.setPrice(Double.parseDouble(txt_PriceCostAddPart.getText()));
@@ -159,7 +194,11 @@ public class EventHandlerController {
             
    }
    
+  @FXML
+   public void cancelAddPart(){
+       Stage stage = (Stage) btn_AddPartCancelAddPart.getScene().getWindow();
+       stage.close();
+   }
    
-  
    
 }
