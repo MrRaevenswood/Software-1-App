@@ -24,6 +24,8 @@ import software.pkg1.app.*;
 public class Software1APP extends Application {
     
     public static Inventory myStock = new Inventory();
+    private static ArrayList<Inhouse> machIDList = new ArrayList<>();
+    private static ArrayList<Outsourced> compNameList = new ArrayList<>();
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -45,6 +47,22 @@ public class Software1APP extends Application {
     
     public static ArrayList<Part> getParts(){
         return myStock.getAllParts();
+    }
+    
+    public static void addInPart(Inhouse newPart){
+        machIDList.add(newPart);
+    }
+    
+    public static void addOutPart(Outsourced newPart){
+        compNameList.add(newPart);
+    }
+    
+    public static int getMachID(int index){
+        return machIDList.get(index).getMachineID();
+    }
+    
+    public static String getCompanyName(int index){
+        return compNameList.get(index).getComapnyName();
     }
     
     /**

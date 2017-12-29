@@ -74,8 +74,43 @@ public class EventHandlerController {
    private Button btn_AddPartSaveAddPart;
    @FXML
    private Button btn_AddPartCancelAddPart;
-    
+   @FXML
+   private TextField txt_MachIdAddPart;
+   @FXML
+   private Label lbl_CompNameAddPart;
+   @FXML
+   private Label lbl_MachIdAddPart;
 
+   //ModifyPartScreeen Variables
+   @FXML
+   private RadioButton rb_InHouseModifyPart;
+   @FXML
+   private RadioButton rb_OutsourcedModifyPart;
+   @FXML
+   private TextField txt_PartNameModifyPart;
+   @FXML 
+   private TextField txt_InvModifyPart;
+   @FXML
+   private TextField txt_PriceCostModifyPart;
+   @FXML
+   private TextField txt_MaxModifyPart;
+   @FXML
+   private TextField txt_MinModifyPart;
+   @FXML
+   private TextField txt_CompanyNameModifyPart;
+   @FXML
+   private TextField txt_IdModifyPart;
+   @FXML
+   private Button btn_ModifyPartSaveModifyPart;
+   @FXML
+   private Button btn_ModifyPartCancelModifyPart;
+   @FXML
+   private TextField txt_MachIdModifyPart;
+   @FXML
+   private Label lbl_CompNameModifyPart;
+   @FXML
+   private Label lbl_MachIdModifyPart;
+   
     
     //Main Screen Event Handler Methods
     @FXML
@@ -100,6 +135,19 @@ public class EventHandlerController {
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyPartScreen));
        stage.show();
+       
+       int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().lookupPart(0).partID;
+       
+       if(Software1APP.getMachID(idIndex) == 0){
+           txt_CompanyNameModifyPart.setText(Software1APP.getCompanyName(idIndex));
+       }
+       else{
+           txt_MachIdModifyPart.setText(Integer.toString(Software1APP.getMachID(idIndex)));
+       }
+       
+       txt_IdModifyPart.setText(Integer.toString(idIndex));
+ 
+       
    }
    
    @FXML
@@ -141,7 +189,6 @@ public class EventHandlerController {
        else
            id = Software1APP.getParts().size() + 1;
        
-       System.out.print(id);
        
        if(rb_InHouseAddPart.isSelected())
        {
@@ -156,6 +203,7 @@ public class EventHandlerController {
            newInPart.setMin(Integer.parseInt(txt_MinAddPart.getText()));
            
            Software1APP.addPart(newInPart);
+           Software1APP.addInPart(newInPart);
            
        } else if(rb_OutsourcedAddPart.isSelected()){
            
@@ -171,6 +219,7 @@ public class EventHandlerController {
            newOutPart.setCompanyName(txt_CompanyNameAddPart.getText());
            
            Software1APP.addPart(newOutPart);
+           Software1APP.addOutPart(newOutPart);
         }
  
        Stage stage = (Stage) btn_AddPartSaveAddPart.getScene().getWindow();
@@ -185,5 +234,36 @@ public class EventHandlerController {
        stage.close();
    }
    
+   @FXML
+   public void machineIDReveal_CompanyNameHide(){
+        lbl_CompNameAddPart.setVisible(false);    
+        txt_CompanyNameAddPart.setVisible(false);
+        lbl_MachIdAddPart.setVisible(true);
+        txt_MachIdAddPart.setVisible(true);         
+   }
    
+   @FXML
+   public void companyNameReveal_machineIDHide(){
+        lbl_CompNameAddPart.setVisible(true);    
+        txt_CompanyNameAddPart.setVisible(true);
+        lbl_MachIdAddPart.setVisible(false);
+        txt_MachIdAddPart.setVisible(false); 
+   }
+ 
+    //Modify Part Screen Events
+   @FXML
+   public void machineIDRevealCompanyNameHideModifyPart(){
+        lbl_CompNameModifyPart.setVisible(false);    
+        txt_CompanyNameModifyPart.setVisible(false);
+        lbl_MachIdModifyPart.setVisible(true);
+        txt_MachIdModifyPart.setVisible(true);  
+   }
+   
+   @FXML
+   public void companyNameReveal_machineIDHideModifyPart(){
+       lbl_CompNameModifyPart.setVisible(true);    
+       txt_CompanyNameModifyPart.setVisible(true);
+       lbl_MachIdModifyPart.setVisible(false);
+       txt_MachIdModifyPart.setVisible(false);
+   }
 }
