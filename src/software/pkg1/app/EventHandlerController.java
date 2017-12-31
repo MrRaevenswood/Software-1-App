@@ -49,7 +49,7 @@ public class EventHandlerController {
     @FXML
     private TableColumn<Part, Double>coln_PRICECOSTPERUNIT;
     @FXML
-    private TableView<Inventory> tbl_PARTS;
+    private TableView<Part> tbl_PARTS;
     
     //AddPartScreeen Variables
    @FXML
@@ -101,6 +101,8 @@ public class EventHandlerController {
    @FXML
    private TextField txt_IdModifyPart;
    @FXML
+   private TextField txt_NameModifyPart;
+   @FXML
    private Button btn_ModifyPartSaveModifyPart;
    @FXML
    private Button btn_ModifyPartCancelModifyPart;
@@ -136,19 +138,51 @@ public class EventHandlerController {
        stage.setScene(new Scene(modifyPartScreen));
        stage.show();
        
-       int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().lookupPart(0).partID;
+       Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().partID - 1);
+
+   }
+   
+   @FXML
+   public void populateSelectedPartToModify(){
        
-       if(Software1APP.getMachID(idIndex) == 0){
-           txt_CompanyNameModifyPart.setText(Software1APP.getCompanyName(idIndex));
+       int idIndex = Software1APP.getSearchIndex();
+       int idToSearch = -1;
+       for(int i = 0; i == Software1APP.getInPart().size(); i++){
+           if(Software1APP.getInPart().get(i).partID == idIndex){
+               idToSearch = i;
+               break;
+           }
+       }
+       
+       if(idToSearch == -1){
+           for(int i = 0; i == Software1APP.getOutPart().size(); i++){
+                if(Software1APP.getOutPart().get(i).partID == idIndex){
+                    idToSearch = i;
+                    break;
+                }
+                
+            }
+        }   
+       System.out.print(idToSearch);
+       if(Integer.toString(Software1APP.getMachID(idToSearch)) == null){
+           txt_CompanyNameModifyPart.setText(Software1APP.getCompanyName(idToSearch));
+           rb_OutsourcedModifyPart.setSelected(true);
+           rb_InHouseModifyPart.setDisable(true);
        }
        else{
-           txt_MachIdModifyPart.setText(Integer.toString(Software1APP.getMachID(idIndex)));
+           txt_MachIdModifyPart.setText(Integer.toString(Software1APP.getMachID(idToSearch)));
+           rb_InHouseModifyPart.setSelected(true);
+           rb_OutsourcedModifyPart.setDisable(true);
        }
        
-       txt_IdModifyPart.setText(Integer.toString(idIndex));
- 
+       txt_NameModifyPart.setText(Software1APP.getParts().get(idToSearch).name);
+       txt_InvModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).inStock));
+       txt_PriceCostModifyPart.setText(Double.toString(Software1APP.getParts().get(idToSearch).price));
+       txt_MaxModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).max));
+       txt_MinModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).min));
        
    }
+   
    
    @FXML
    public void openModifyProductScreen() throws IOException{
@@ -189,12 +223,11 @@ public class EventHandlerController {
        else
            id = Software1APP.getParts().size() + 1;
        
-       
        if(rb_InHouseAddPart.isSelected())
        {
            Inhouse newInPart = new Inhouse();
            
-           newInPart.setMachineID(id);
+           newInPart.setMachineID(Integer.parseInt(txt_MachIdAddPart.getText()));
            newInPart.setPartID(id);
            newInPart.setName(txt_PartNameAddPart.getText());
            newInPart.setInStock(Integer.parseInt(txt_InvAddPart.getText()));
@@ -266,4 +299,6 @@ public class EventHandlerController {
        lbl_MachIdModifyPart.setVisible(false);
        txt_MachIdModifyPart.setVisible(false);
    }
+   
+   
 }

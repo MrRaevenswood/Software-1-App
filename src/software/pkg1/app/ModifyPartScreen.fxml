@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="479.0" prefWidth="547.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="479.0" prefWidth="547.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Label layoutX="40.0" layoutY="32.0" text="Modify Part" textFill="#040d6f">
          <font>
@@ -21,7 +21,7 @@
          </toggleGroup></RadioButton>
       <RadioButton fx:id="rb_OutsourcedModifyPart" layoutX="333.0" layoutY="32.0" mnemonicParsing="false" onAction="#companyNameReveal_machineIDHideModifyPart" text="Outsourced" toggleGroup="$InOrOut" />
       <TextField fx:id="txt_IDModifyPart" disable="true" layoutX="222.0" layoutY="100.0" />
-      <TextField fx:id="txt_NameModifyPart" layoutX="222.0" layoutY="154.0" />
+      <TextField fx:id="txt_NameModifyPart" layoutX="222.0" layoutY="154.0" onMouseClicked="#populateSelectedPartToModify" />
       <TextField fx:id="txt_InvModifyPart" layoutX="222.0" layoutY="207.0" />
       <TextField fx:id="txt_PriceCostModifyPart" layoutX="222.0" layoutY="262.0" />
       <TextField fx:id="txt_MaxModifyPart" layoutX="222.0" layoutY="318.0" prefHeight="27.0" prefWidth="122.0" />

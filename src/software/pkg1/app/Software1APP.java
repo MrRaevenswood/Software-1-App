@@ -26,6 +26,7 @@ public class Software1APP extends Application {
     public static Inventory myStock = new Inventory();
     private static ArrayList<Inhouse> machIDList = new ArrayList<>();
     private static ArrayList<Outsourced> compNameList = new ArrayList<>();
+    private static int searchIndex = 0;
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -57,6 +58,14 @@ public class Software1APP extends Application {
         compNameList.add(newPart);
     }
     
+    public static ArrayList<Inhouse> getInPart(){
+        return machIDList;
+    }
+    
+    public static ArrayList<Outsourced> getOutPart(){
+        return compNameList;
+    }
+    
     public static int getMachID(int index){
         return machIDList.get(index).getMachineID();
     }
@@ -65,6 +74,13 @@ public class Software1APP extends Application {
         return compNameList.get(index).getComapnyName();
     }
     
+    public static void setSearchIndex(int index){
+        searchIndex = index;
+    }
+    
+    public static int getSearchIndex(){
+        return searchIndex;
+    }
     /**
      * @param args the command line arguments
      */
