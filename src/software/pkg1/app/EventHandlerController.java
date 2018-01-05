@@ -103,9 +103,9 @@ public class EventHandlerController {
    @FXML
    private TextField txt_NameModifyPart;
    @FXML
-   private Button btn_ModifyPartSaveModifyPart;
+   private Button btn_SaveModifyPart;
    @FXML
-   private Button btn_ModifyPartCancelModifyPart;
+   private Button btn_CancelModifyPart;
    @FXML
    private TextField txt_MachIdModifyPart;
    @FXML
@@ -131,7 +131,7 @@ public class EventHandlerController {
        stage.show();
    }
    
-   @FXML
+  @FXML
    public void openModifyPartScreen() throws IOException{
        Parent modifyPartScreen = FXMLLoader.load(getClass().getResource("ModifyPartScreen.fxml"));
        Stage stage = new Stage();
@@ -145,32 +145,67 @@ public class EventHandlerController {
    @FXML
    public void populateSelectedPartToModify(){
        
-       int idIndex = Software1APP.getSearchIndex();
+       int idIndex = Software1APP.getSearchIndex() + 1;
        int idToSearch = -1;
-       for(int i = 0; i == Software1APP.getInPart().size(); i++){
+       int machId = -1;
+       int outPartCounter = 0; 
+       String companyName = "";
+       
+       for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
+           System.out.println("InPart Part ID " + Software1APP.getInPart().get(i).partID);
+           System.out.println("idIndex value" + idIndex);
            if(Software1APP.getInPart().get(i).partID == idIndex){
-               idToSearch = i;
+               idToSearch = Software1APP.getInPart().get(i).partID - 1;
+               System.out.println("idToSearch Value " + idToSearch);
+               for (int n = 0; n <= Software1APP.getInPart().size() - 1; n++)
+                    {
+                        System.out.println(n);
+                        if(Software1APP.getInPart().get(n).partID == idToSearch + 1)
+                        {
+                            System.out.println(n);
+                            machId = Software1APP.getMachID(n);
+                            break;
+                        }
+                    }
+               
+               this.machineIDRevealCompanyNameHideModifyPart();
                break;
            }
        }
-       
+       System.out.println("id Index " + idIndex);
+       System.out.println("Current id to search " + idToSearch);
        if(idToSearch == -1){
-           for(int i = 0; i == Software1APP.getOutPart().size(); i++){
+           for(int i = 0; i <= Software1APP.getOutPart().size() - 1; i++){
+               System.out.println("OutPart Part ID " + Software1APP.getOutPart().get(i).partID);
                 if(Software1APP.getOutPart().get(i).partID == idIndex){
-                    idToSearch = i;
+                    idToSearch = Software1APP.getOutPart().get(i).partID - 1;
+                    
+                    for (int n = 0; n <= Software1APP.getOutPart().size() - 1; n++)
+                    {
+                        
+                        if(Software1APP.getOutPart().get(n).partID == idToSearch + 1)
+                        {
+                            companyName = Software1APP.getCompanyName(n);
+                            break;
+                        }
+                    }
+                    this.companyNameReveal_machineIDHideModifyPart();
                     break;
                 }
                 
             }
-        }   
-       System.out.print(idToSearch);
-       if(Integer.toString(Software1APP.getMachID(idToSearch)) == null){
-           txt_CompanyNameModifyPart.setText(Software1APP.getCompanyName(idToSearch));
+        }
+       System.out.println("OutPart size " + Software1APP.getOutPart().size());
+       System.out.println("InPart size " + Software1APP.getInPart().size());
+       System.out.println("id to search " + idToSearch);
+       System.out.println("id Index " + idIndex);
+       if(machId == -1){
+           txt_CompanyNameModifyPart.setText(companyName);
            rb_OutsourcedModifyPart.setSelected(true);
            rb_InHouseModifyPart.setDisable(true);
        }
        else{
-           txt_MachIdModifyPart.setText(Integer.toString(Software1APP.getMachID(idToSearch)));
+           txt_MachIdModifyPart.setText(Integer.toString(machId));
            rb_InHouseModifyPart.setSelected(true);
            rb_OutsourcedModifyPart.setDisable(true);
        }
@@ -193,8 +228,10 @@ public class EventHandlerController {
    }
    
    @FXML
-   public void populatePartsTable(){
+   public void populatePartsTable(){   
     
+    tbl_PARTS.refresh();
+     
     ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
     
      coln_PARTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
@@ -300,5 +337,73 @@ public class EventHandlerController {
        txt_MachIdModifyPart.setVisible(false);
    }
    
+   @FXML
+   public void modifyPart(){
+       
+       int searchIndex = Software1APP.getSearchIndex();
+       int outPartSearchIndex = 0;
+       int inPartSearchIndex = 0; 
+       int partId = Software1APP.getParts().get(searchIndex).partID;
+       
+       if(rb_InHouseModifyPart.isSelected()){
+           
+           for(int i = 1; i <= Software1APP.getInPart().size() - 1; i++){
+               if(Software1APP.getInPart().get(i).partID == partId){
+                   inPartSearchIndex = i;
+                   break;
+               }
+           }
+           
+           Inhouse inPartToModify = Software1APP.getInPart().get(inPartSearchIndex);
+           
+           inPartToModify.setName(txt_NameModifyPart.getText());
+           inPartToModify.setInStock(Integer.parseInt(txt_InvModifyPart.getText()));
+           inPartToModify.setPrice(Double.parseDouble(txt_PriceCostModifyPart.getText()));
+           inPartToModify.setMax(Integer.parseInt(txt_MaxModifyPart.getText()));
+           inPartToModify.setMin(Integer.parseInt(txt_MinModifyPart.getText()));
+           inPartToModify.setMachineID(Integer.parseInt(txt_MachIdModifyPart.getText()));
+           
+           Software1APP.getParts().get(searchIndex).setName(txt_NameModifyPart.getText());
+           Software1APP.getParts().get(searchIndex).setInStock(Integer.parseInt(txt_InvModifyPart.getText()));
+           Software1APP.getParts().get(searchIndex).setPrice(Double.parseDouble(txt_PriceCostModifyPart.getText()));
+           Software1APP.getParts().get(searchIndex).setMax(Integer.parseInt(txt_MaxModifyPart.getText()));
+           Software1APP.getParts().get(searchIndex).setMin(Integer.parseInt(txt_MinModifyPart.getText()));
+           
+       }else if(rb_OutsourcedModifyPart.isSelected()){
+           
+           for(int i = 1; i <= Software1APP.getOutPart().size() - 1; i++){
+               if(Software1APP.getOutPart().get(i).partID == partId){
+                   outPartSearchIndex = i;
+                   break;
+               }
+           }
+           Outsourced outPartToModify = Software1APP.getOutPart().get(outPartSearchIndex);
+           
+           outPartToModify.setName(txt_NameModifyPart.getText());
+           outPartToModify.setInStock(Integer.parseInt(txt_InvModifyPart.getText()));
+           outPartToModify.setPrice(Double.parseDouble(txt_PriceCostModifyPart.getText()));
+           outPartToModify.setMax(Integer.parseInt(txt_MaxModifyPart.getText()));
+           outPartToModify.setMin(Integer.parseInt(txt_MinModifyPart.getText()));
+           outPartToModify.setCompanyName(txt_CompanyNameModifyPart.getText());          
+           
+           Part partToModify = Software1APP.getParts().get(searchIndex);
+           
+           partToModify.setName(txt_NameModifyPart.getText());
+           partToModify.setInStock(Integer.parseInt(txt_InvModifyPart.getText()));
+           partToModify.setPrice(Double.parseDouble(txt_PriceCostModifyPart.getText()));
+           partToModify.setMax(Integer.parseInt(txt_MaxModifyPart.getText()));
+           partToModify.setMin(Integer.parseInt(txt_MinModifyPart.getText()));   
+       }
+       
+       Stage stage = (Stage) btn_SaveModifyPart.getScene().getWindow();
+       stage.close();
+   }
+   
+   @FXML
+   public void cancelModifyPart(){
+       
+       Stage stage = (Stage) btn_CancelModifyPart.getScene().getWindow();
+       stage.close();
+   }
    
 }
