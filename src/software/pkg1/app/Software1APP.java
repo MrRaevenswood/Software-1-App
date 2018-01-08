@@ -50,12 +50,24 @@ public class Software1APP extends Application {
         return myStock.getAllParts();
     }
     
+    public static void deletePart(int index){
+        myStock.getAllParts().remove(index);
+    }
+    
     public static void addInPart(Inhouse newPart){
         machIDList.add(newPart);
     }
     
+    public static void deleteOutPart(int index){
+        compNameList.remove(index);
+    }
+    
     public static void addOutPart(Outsourced newPart){
         compNameList.add(newPart);
+    }
+    
+    public static void deleteInPart(int index){
+        machIDList.remove(index);
     }
     
     public static ArrayList<Inhouse> getInPart(){

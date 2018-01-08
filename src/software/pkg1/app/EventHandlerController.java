@@ -143,6 +143,70 @@ public class EventHandlerController {
    }
    
    @FXML
+   public void deleteSelectedPart(){
+       
+       int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().partID;
+       int idToSearch = -1;
+       int machId = -1;
+       int outPartCounter = 0; 
+       String companyName = "";
+       
+       for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
+           System.out.println("InPart Part ID " + Software1APP.getInPart().get(i).partID);
+           System.out.println("idIndex value" + idIndex);
+           if(Software1APP.getInPart().get(i).partID == idIndex){
+               idToSearch = Software1APP.getInPart().get(i).partID - 1;
+               System.out.println("idToSearch Value " + idToSearch);
+               for (int n = 0; n <= Software1APP.getInPart().size() - 1; n++)
+                    {
+                        System.out.println(n);
+                        if(Software1APP.getInPart().get(n).partID == idToSearch + 1)
+                        {
+                            System.out.println(n);
+                            machId = Software1APP.getMachID(n);
+                            break;
+                        }
+                    }
+               break;
+           }
+       }
+       System.out.println("id Index " + idIndex);
+       System.out.println("Current id to search " + idToSearch);
+       if(idToSearch == -1){
+           for(int i = 0; i <= Software1APP.getOutPart().size() - 1; i++){
+               System.out.println("OutPart Part ID " + Software1APP.getOutPart().get(i).partID);
+                if(Software1APP.getOutPart().get(i).partID == idIndex){
+                    idToSearch = Software1APP.getOutPart().get(i).partID - 1;
+                    
+                    for (int n = 0; n <= Software1APP.getOutPart().size() - 1; n++)
+                    {
+                        
+                        if(Software1APP.getOutPart().get(n).partID == idToSearch + 1)
+                        {
+                            companyName = Software1APP.getCompanyName(n);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                
+            }
+        }
+       
+       Software1APP.deletePart(idIndex - 1);
+       
+       System.out.println("Current id to search " + idToSearch);
+       System.out.println(machId);
+       
+       if(machId == -1){
+           Software1APP.deleteOutPart(idToSearch);
+       }
+       else{
+           Software1APP.deleteInPart(idToSearch);
+       }
+   }
+   
+   @FXML
    public void populateSelectedPartToModify(){
        
        int idIndex = Software1APP.getSearchIndex() + 1;
@@ -258,7 +322,7 @@ public class EventHandlerController {
        if(Software1APP.getParts().isEmpty())
            id = 1;
        else
-           id = Software1APP.getParts().size() + 1;
+           id = Software1APP.getParts().get(Software1APP.getParts().size() - 1).partID + 1;
        
        if(rb_InHouseAddPart.isSelected())
        {
