@@ -6,8 +6,11 @@
 package software.pkg1.app;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import static java.util.Collections.list;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -50,6 +53,8 @@ public class EventHandlerController {
     private TableColumn<Part, Double>coln_PRICECOSTPERUNIT;
     @FXML
     private TableView<Part> tbl_PARTS;
+    @FXML
+    private TextField txt_PARTSEARCH;
     
     //AddPartScreeen Variables
    @FXML
@@ -164,6 +169,7 @@ public class EventHandlerController {
                         {
                             System.out.println(n);
                             machId = Software1APP.getMachID(n);
+                            idToSearch = n;
                             break;
                         }
                     }
@@ -184,6 +190,7 @@ public class EventHandlerController {
                         if(Software1APP.getOutPart().get(n).partID == idToSearch + 1)
                         {
                             companyName = Software1APP.getCompanyName(n);
+                            idToSearch = n;
                             break;
                         }
                     }
@@ -193,7 +200,17 @@ public class EventHandlerController {
             }
         }
        
-       Software1APP.deletePart(idIndex - 1);
+       
+       for(int p = 0; p <= Software1APP.getParts().size() - 1; p++){
+        
+        if(Software1APP.getParts().get(p).partID == idIndex){
+            
+            Software1APP.deletePart(p);
+            break;
+            
+        }   
+           
+       }
        
        System.out.println("Current id to search " + idToSearch);
        System.out.println(machId);
@@ -204,6 +221,35 @@ public class EventHandlerController {
        else{
            Software1APP.deleteInPart(idToSearch);
        }
+   }
+   
+   @FXML
+   public void findPart(){
+       String partToSearch = txt_PARTSEARCH.getText();
+       ArrayList<Part> partsFound = new ArrayList<Part>();
+    
+       Pattern p = Pattern.compile(partToSearch);
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           
+           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           
+           if(m.find()){
+               partsFound.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_PARTS.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(partsFound);
+    
+     coln_PARTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_PARTNAME.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_INVENTORYLEVELPARTS.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PRICECOSTPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+    tbl_PARTS.setItems(list);
+       
    }
    
    @FXML
