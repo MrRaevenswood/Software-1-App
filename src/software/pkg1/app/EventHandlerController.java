@@ -34,15 +34,7 @@ import software.pkg1.app.Software1APP;
  */
 public class EventHandlerController {
     
-    //Main Screen Variables
-    @FXML
-    private TableColumn coln_PRODUCT_ID;
-    @FXML
-    private TableColumn coln_PRODUCTNAME;
-    @FXML
-    private TableColumn coln_INVENTORYLEVELPRODUCTS;
-    @FXML
-    private TableColumn coln_PRICEPERUNIT;
+    //Main Screen Variables for Part Section
     @FXML
     private TableColumn<Part, Integer> coln_PARTID;
     @FXML
@@ -55,6 +47,21 @@ public class EventHandlerController {
     private TableView<Part> tbl_PARTS;
     @FXML
     private TextField txt_PARTSEARCH;
+    
+    //Main Screen Variables for Product Section
+    @FXML
+    private TableView<Product> tbl_PRODUCTS;
+    @FXML
+    private TableColumn<Part,Integer> coln_PRODUCTID;
+    @FXML
+    private TableColumn<Part, String> coln_PRODUCTNAME;
+    @FXML
+    private TableColumn<Part, Integer> coln_INVENTORYLEVELPRODUCTS;
+    @FXML
+    private TableColumn<Part, Double> coln_PRICEPERUNIT;
+    @FXML
+    private TextField txt_PRODUCTSEARCH;
+    
     
     //AddPartScreeen Variables
    @FXML
@@ -118,6 +125,40 @@ public class EventHandlerController {
    @FXML
    private Label lbl_MachIdModifyPart;
    
+   //Add Product Screen Variables
+   @FXML
+   private TextField txt_ProductNameAddProduct;
+   @FXML
+   private TextField txt_InvAddProduct;
+   @FXML
+   private TextField txt_PriceAddProduct;
+   @FXML
+   private TextField txt_MaxAddProduct;
+   @FXML
+   private TextField txt_MinAddProduct;
+   @FXML
+   private TextField txt_SearchAddProduct;
+   @FXML
+   private TableView<Part> tbl_SearchTableAddProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_SearchPartIDAddProduct;
+   @FXML
+   private TableColumn<Part, String> coln_SearchPartNameAddProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_SearchInvLvlAddProduct;
+   @FXML
+   private TableColumn<Part, Double> coln_SearchPricePerUnitAddProduct;
+   @FXML
+   private TableView<Part> tbl_CurrentContentsAddProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_CurrentContentsPartID;
+   @FXML
+   private TableColumn<Part, String> coln_CurrentContentsPartName;
+   @FXML
+   private TableColumn<Part, Integer> coln_CurrentContentInvLvl;
+   @FXML
+   private TableColumn<Part, Double> coln_CurrentContentPricePerUnit;
+   
     
     //Main Screen Event Handler Methods
     @FXML
@@ -153,7 +194,6 @@ public class EventHandlerController {
        int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().partID;
        int idToSearch = -1;
        int machId = -1;
-       int outPartCounter = 0; 
        String companyName = "";
        
        for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
@@ -516,4 +556,37 @@ public class EventHandlerController {
        stage.close();
    }
    
+   //Add Product Screen Events
+   @FXML
+   public void populateAssociatedPartsTable(){
+       
+       int idIndex = tbl_SearchTableAddProduct.getSelectionModel().getSelectedItem().partID;
+       ArrayList<Part> partsToAssociate = new ArrayList<Part>();
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           if(idIndex == Software1APP.getParts().get(i).partID){
+               partsToAssociate.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_CurrentContentsAddProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(partsToAssociate);
+    
+     coln_CurrentContentsPartID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_CurrentContentsPartName.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_CurrentContentInvLvl.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_CurrentContentPricePerUnit.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+    
+     tbl_CurrentContentsAddProduct.setItems(list);
+     
+   }
+   
+   @FXML
+   public void saveProduct(){
+       Product productToAdd = new Product();
+       
+       
+   }
 }
+
