@@ -50,6 +50,10 @@ public class Software1APP extends Application {
         return myStock.getAllParts();
     }
     
+    public static ArrayList<Product> getProducts(){
+        return myStock
+    }
+    
     public static void deletePart(int index){
         myStock.getAllParts().remove(index);
     }

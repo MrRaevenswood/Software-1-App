@@ -393,6 +393,17 @@ public class EventHandlerController {
    }
    
    @FXML
+   public void populateProductsTable(){
+     
+    tbl_PRODUCTS.refresh();
+    
+    ObservableList list = FXCollections.observableArrayList(Software1APP.myStock.getAllProducts());
+    
+    coln_PRODUCTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.g));
+       
+   }
+   
+   @FXML
    public void closeProgram() throws IOException{
        System.exit(0);
    }
@@ -585,7 +596,19 @@ public class EventHandlerController {
    @FXML
    public void saveProduct(){
        Product productToAdd = new Product();
+       ObservableList<Part> associatedParts = tbl_CurrentContentsAddProduct.getItems();
        
+       productToAdd.setName(txt_ProductNameAddProduct.getText());
+       productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
+       productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
+       productToAdd.setMax(Integer.parseInt(txt_MaxAddProduct.getText()));
+       productToAdd.setMin(Integer.parseInt(txt_MinAddProduct.getText()));
+       
+       for(Part p : associatedParts){
+           productToAdd.addAssociatedPart(p);
+       }
+       
+       Software1APP.addProduct(productToAdd);
        
    }
 }
