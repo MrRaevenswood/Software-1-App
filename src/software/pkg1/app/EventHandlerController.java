@@ -52,13 +52,13 @@ public class EventHandlerController {
     @FXML
     private TableView<Product> tbl_PRODUCTS;
     @FXML
-    private TableColumn<Part,Integer> coln_PRODUCTID;
+    private TableColumn<Product,Integer> coln_PRODUCTID;
     @FXML
-    private TableColumn<Part, String> coln_PRODUCTNAME;
+    private TableColumn<Product, String> coln_PRODUCTNAME;
     @FXML
-    private TableColumn<Part, Integer> coln_INVENTORYLEVELPRODUCTS;
+    private TableColumn<Product, Integer> coln_INVENTORYLEVELPRODUCTS;
     @FXML
-    private TableColumn<Part, Double> coln_PRICEPERUNIT;
+    private TableColumn<Product, Double> coln_PRICEPERUNIT;
     @FXML
     private TextField txt_PRODUCTSEARCH;
     
@@ -399,8 +399,12 @@ public class EventHandlerController {
     
     ObservableList list = FXCollections.observableArrayList(Software1APP.myStock.getAllProducts());
     
-    coln_PRODUCTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.g));
-       
+    coln_PRODUCTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getProductID()));
+    coln_PRODUCTNAME.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+    coln_INVENTORYLEVELPRODUCTS.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+    coln_PRICEPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+    
+    tbl_PRODUCTS.setItems(list);
    }
    
    @FXML

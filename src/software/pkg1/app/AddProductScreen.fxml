@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="886.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="886.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Region layoutX="20.0" layoutY="14.0" prefHeight="583.0" prefWidth="842.0" style="-fx-border-color: black;">
          <cursor>

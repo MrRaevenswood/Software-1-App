@@ -51,7 +51,7 @@ public class Software1APP extends Application {
     }
     
     public static ArrayList<Product> getProducts(){
-        return myStock
+        return myStock.getAllProducts();
     }
     
     public static void deletePart(int index){
