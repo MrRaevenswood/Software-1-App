@@ -36,7 +36,7 @@
             <TableColumn fx:id="coln_PRICECOSTPERUNIT" prefWidth="152.0" text="Price/Cost per Unit" />
         </columns>
       </TableView>
-      <TableView fx:id="tbl_PRODUCTS" layoutX="565.0" layoutY="204.0" prefHeight="200.0" prefWidth="426.0">
+      <TableView fx:id="tbl_PRODUCTS" layoutX="565.0" layoutY="204.0" onMouseClicked="#populateProductsTable" prefHeight="200.0" prefWidth="426.0">
          <columns>
             <TableColumn fx:id="coln_PRODUCTID" prefWidth="89.0" text="Product ID" />
             <TableColumn fx:id="coln_PRODUCTNAME" prefWidth="101.0" text="Product Name" />
@@ -53,7 +53,7 @@
       <Button fx:id="btn_PARTDELETE" layoutX="351.0" layoutY="417.0" mnemonicParsing="false" onAction="#deleteSelectedPart" text="Delete" />
       <Button fx:id="btn_PRODUCTADD" layoutX="655.0" layoutY="417.0" mnemonicParsing="false" onAction="#openAddProductScreen" text="Add" />
       <Button fx:id="btn_PRODUCTMODIFY" layoutX="743.0" layoutY="417.0" mnemonicParsing="false" onAction="#openModifyProductScreen" text="Modify" />
-      <Button fx:id="btn_PRODUCTDELETE" layoutX="850.0" layoutY="417.0" mnemonicParsing="false" text="Delete" />
+      <Button fx:id="btn_PRODUCTDELETE" layoutX="850.0" layoutY="417.0" mnemonicParsing="false" onAction="#deleteProduct" text="Delete" />
       <Button fx:id="btn_MAINSCREENEXIT" layoutX="960.0" layoutY="485.0" mnemonicParsing="false" onAction="#closeProgram" text="Exit" />
    </children>
 </Pane>

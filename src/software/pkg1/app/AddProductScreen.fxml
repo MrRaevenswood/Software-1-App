@@ -58,7 +58,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="tbl_SearchTableAddProduct" layoutX="375.0" layoutY="124.0" onMouseClicked="#populatePartsTable" prefHeight="158.0" prefWidth="457.0">
+      <TableView fx:id="tbl_SearchTableAddProduct" layoutX="375.0" layoutY="124.0" onMouseClicked="#populateToBeAssociatedPartsTable" prefHeight="158.0" prefWidth="457.0">
         <columns>
           <TableColumn fx:id="coln_SearchPartIDAddProduct" prefWidth="113.0" text="Part ID" />
           <TableColumn fx:id="coln_SearchPartNameAddProduct" prefWidth="121.0" text="Part Name" />
@@ -74,10 +74,10 @@
             <TableColumn fx:id="coln_CurrentContentPricePerUnit" prefWidth="135.0" text="Price Per Unit" />
          </columns>
       </TableView>
-      <Button fx:id="btn_SearchAddProduct" layoutX="494.0" layoutY="81.0" mnemonicParsing="false" onAction="#findPart" text="Search" />
-      <Button fx:id="btn_SaveAddProduct" layoutX="700.0" layoutY="549.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="btn_CancelAddProduct" layoutX="761.0" layoutY="549.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="btn_DeleteAddProduct" layoutX="761.0" layoutY="507.0" mnemonicParsing="false" text="Delete" />
+      <Button fx:id="btn_SearchAddProduct" layoutX="494.0" layoutY="81.0" mnemonicParsing="false" onAction="#findPartsToBeAssociated" text="Search" />
+      <Button fx:id="btn_SaveAddProduct" layoutX="700.0" layoutY="549.0" mnemonicParsing="false" onAction="#saveProduct" text="Save" />
+      <Button fx:id="btn_CancelAddProduct" layoutX="761.0" layoutY="549.0" mnemonicParsing="false" onAction="#cancelAddProduct" text="Cancel" />
+      <Button fx:id="btn_DeleteAddProduct" layoutX="761.0" layoutY="507.0" mnemonicParsing="false" onAction="#deleteAssociatedPart" text="Delete" />
       <Button fx:id="btn_AddAddProduct" layoutX="761.0" layoutY="290.0" mnemonicParsing="false" onAction="#populateAssociatedPartsTable" text="Add" />
       <TextField fx:id="txt_SearchAddProduct" layoutX="580.0" layoutY="81.0" />
    </children>

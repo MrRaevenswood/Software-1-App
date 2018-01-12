@@ -127,6 +127,12 @@ public class EventHandlerController {
    
    //Add Product Screen Variables
    @FXML
+   private Button btn_DeleteAddProduct;
+   @FXML
+   private Button btn_CancelAddProduct;
+   @FXML
+   private Button btn_SaveAddProduct;
+   @FXML
    private TextField txt_ProductNameAddProduct;
    @FXML
    private TextField txt_InvAddProduct;
@@ -186,6 +192,19 @@ public class EventHandlerController {
        
        Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().partID - 1);
 
+   }
+   
+   @FXML
+   public void deleteProduct(){
+       int idIndex = tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID();
+       
+       for(Product p : Software1APP.getProducts()){
+           if(p.getProductID() == idIndex){
+               Software1APP.myStock.getAllProducts().remove(p);
+               break;
+           }
+       }
+       
    }
    
    @FXML
@@ -573,20 +592,35 @@ public class EventHandlerController {
    
    //Add Product Screen Events
    @FXML
+   public void populateToBeAssociatedPartsTable(){   
+    
+    tbl_SearchTableAddProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
+    
+     coln_SearchPartIDAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_SearchPartNameAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_SearchInvLvlAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_SearchPricePerUnitAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+     tbl_SearchTableAddProduct.setItems(list);
+   }
+   
+   
+   @FXML
    public void populateAssociatedPartsTable(){
        
        int idIndex = tbl_SearchTableAddProduct.getSelectionModel().getSelectedItem().partID;
-       ArrayList<Part> partsToAssociate = new ArrayList<Part>();
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
            if(idIndex == Software1APP.getParts().get(i).partID){
-               partsToAssociate.add(Software1APP.getParts().get(i));
+               Software1APP.partsToBeAssociated.add(Software1APP.getParts().get(i));
            }
        }
        
     tbl_CurrentContentsAddProduct.refresh();
      
-    ObservableList list = FXCollections.observableArrayList(partsToAssociate);
+    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
     
      coln_CurrentContentsPartID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
      coln_CurrentContentsPartName.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
@@ -598,10 +632,48 @@ public class EventHandlerController {
    }
    
    @FXML
+   public void findPartsToBeAssociated(){
+       String partToSearch = txt_SearchAddProduct.getText();
+       ArrayList<Part> partsFound = new ArrayList<Part>();
+    
+       Pattern p = Pattern.compile(partToSearch);
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           
+           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           
+           if(m.find()){
+               partsFound.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_SearchTableAddProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(partsFound);
+    
+     coln_SearchPartIDAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_SearchPartNameAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_SearchInvLvlAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_SearchPricePerUnitAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+    tbl_SearchTableAddProduct.setItems(list);
+       
+   }
+   
+   @FXML
    public void saveProduct(){
+       
+       int id;
+       if(Software1APP.getProducts().isEmpty())
+           id = 1;
+       else
+           id = Software1APP.getProducts().get(Software1APP.getProducts().size() - 1).getProductID() + 1;
+       
+       
        Product productToAdd = new Product();
        ObservableList<Part> associatedParts = tbl_CurrentContentsAddProduct.getItems();
        
+       productToAdd.setProductID(id);
        productToAdd.setName(txt_ProductNameAddProduct.getText());
        productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
        productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
@@ -612,8 +684,32 @@ public class EventHandlerController {
            productToAdd.addAssociatedPart(p);
        }
        
-       Software1APP.addProduct(productToAdd);
+       Software1APP.myStock.addProduct(productToAdd);
+       Software1APP.partsToBeAssociated.clear();
+       
+       Stage stage = (Stage) btn_SaveAddProduct.getScene().getWindow();
+       stage.close();
        
    }
+   
+   @FXML
+   public void cancelAddProduct(){
+       Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
+       stage.close();
+   }
+   
+   @FXML
+   public void deleteAssociatedPart(){
+       int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
+       
+       for(Part p : Software1APP.getParts()){
+           if(p.getPartID() == idIndex){
+               Software1APP.partsToBeAssociated.remove(p);
+               break;
+           }
+       }
+   }
+   
+   
 }
 

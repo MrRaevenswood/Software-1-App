@@ -26,6 +26,7 @@ public class Software1APP extends Application {
     public static Inventory myStock = new Inventory();
     private static ArrayList<Inhouse> machIDList = new ArrayList<>();
     private static ArrayList<Outsourced> compNameList = new ArrayList<>();
+    public static ArrayList<Part> partsToBeAssociated = new ArrayList<>();
     private static int searchIndex = 0;
     
     @Override
