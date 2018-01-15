@@ -165,6 +165,51 @@ public class EventHandlerController {
    @FXML
    private TableColumn<Part, Double> coln_CurrentContentPricePerUnit;
    
+   //Modify Product Fields
+   @FXML
+   private TextField txt_NameModifyProduct;
+   @FXML
+   private TextField txt_InvModifyProduct;
+   @FXML
+   private TextField txt_PriceModifyProduct;
+   @FXML
+   private TextField txt_MaxModifyProduct;
+   @FXML
+   private TextField txt_MinModifyProduct;
+   @FXML
+   private TextField txt_SearchModifyProduct;
+   @FXML
+   private Button btn_SearchModifyProduct;
+   @FXML
+   private Button btn_AddModifyProduct;
+   @FXML
+   private Button btn_DeleteModifyProduct;
+   @FXML
+   private Button btn_SaveModifyProduct;
+   @FXML
+   private Button btn_CancelModifyProduct;
+   @FXML
+   private TableView<Part> tbl_SearchModifyProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_partIDModifyProduct;
+   @FXML
+   private TableColumn<Part, String> coln_PartNameModifyProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_InvModifyProduct;
+   @FXML
+   private TableColumn<Part, Double> coln_PricePerUnitModifyProduct;
+   @FXML
+   private TableView<Part> tbl_AddModifyProduct;
+   @FXML
+   private TableColumn<Part, Integer> coln_PartIDAddPartToProdinModProd;
+   @FXML
+   private TableColumn<Part, String> coln_PartNameAddPartToProdinModProd;
+   @FXML
+   private TableColumn<Part, Integer> coln_InvLevelAddPartToProdInModProd;
+   @FXML
+   private TableColumn<Part, Double> coln_PricePerUnitAddPartToProdInModProd;
+   
+   
     
     //Main Screen Event Handler Methods
     @FXML
@@ -701,15 +746,59 @@ public class EventHandlerController {
    @FXML
    public void deleteAssociatedPart(){
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
+       int counter = 0;
        
        for(Part p : Software1APP.getParts()){
+             
            if(p.getPartID() == idIndex){
+               
                Software1APP.partsToBeAssociated.remove(p);
                break;
-           }
+           }      
+           counter++;
        }
+       
+    tbl_CurrentContentsAddProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+    
+     coln_CurrentContentsPartID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_CurrentContentsPartName.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_CurrentContentInvLvl.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_CurrentContentPricePerUnit.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+    
+     tbl_CurrentContentsAddProduct.setItems(list);
+     
    }
    
+   @FXML
+   public void populateProductToModify(){
+       
+       int idIndex = Software1APP.getSearchIndex() + 1;
+       int idToSearch = -1;
+       
+       Product prodToModify = new Product();
+       
+       for(Product p: Software1APP.getProducts()){
+           if(p.getProductID() == Software1APP.getProducts().get(idIndex).getProductID()){
+              prodToModify = p;
+              break;
+           }
+       }
+       
+       txt_NameModifyProduct.setText(prodToModify.getName());
+       txt_InvModifyProduct.setText(Integer.toString(prodToModify.getInStock()));
+       txt_PriceModifyProduct.setText(Double.toString(prodToModify.getPrice()));
+       txt_MaxModifyProduct.setText(Integer.toString(prodToModify.getMax()));
+       txt_MinModifyProduct.setText(Integer.toString(prodToModify.getMin()));
+       
+       ObservableList list = FXCollections.observableArrayList(prodToModify.getAssociatedParts());
+       
+       
+       
+       
+       
+   }
    
 }
 
