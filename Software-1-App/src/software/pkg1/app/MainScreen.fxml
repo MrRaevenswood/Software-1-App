@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="MAINSCREEN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1035.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
+<Pane fx:id="MAINSCREEN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1035.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Region layoutX="32.0" layoutY="141.0" prefHeight="314.0" prefWidth="478.0" style="-fx-border-color: black;" />
       <Region layoutX="534.0" layoutY="141.0" prefHeight="314.0" prefWidth="478.0" style="-fx-border-color: black;" />
@@ -36,7 +36,7 @@
             <TableColumn fx:id="coln_PRICECOSTPERUNIT" prefWidth="152.0" text="Price/Cost per Unit" />
         </columns>
       </TableView>
-      <TableView fx:id="tbl_PRODUCTS" layoutX="565.0" layoutY="204.0" prefHeight="200.0" prefWidth="426.0">
+      <TableView fx:id="tbl_PRODUCTS" layoutX="565.0" layoutY="204.0" onMouseClicked="#populateProductsTable" prefHeight="200.0" prefWidth="426.0">
          <columns>
             <TableColumn fx:id="coln_PRODUCTID" prefWidth="89.0" text="Product ID" />
             <TableColumn fx:id="coln_PRODUCTNAME" prefWidth="101.0" text="Product Name" />

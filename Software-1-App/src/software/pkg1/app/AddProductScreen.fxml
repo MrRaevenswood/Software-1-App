@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="886.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Region layoutX="20.0" layoutY="14.0" prefHeight="583.0" prefWidth="842.0" style="-fx-border-color: black;">
@@ -59,20 +58,20 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="tbl_SearchTableAddProduct" layoutX="375.0" layoutY="124.0" prefHeight="158.0" prefWidth="457.0">
+      <TableView fx:id="tbl_SearchTableAddProduct" layoutX="375.0" layoutY="124.0" onMouseClicked="#populateToBeAssociatedPartsTable" prefHeight="158.0" prefWidth="457.0">
         <columns>
-          <TableColumn prefWidth="113.0" text="Part ID" />
-          <TableColumn prefWidth="121.0" text="Part Name" />
-            <TableColumn prefWidth="105.0" text="Inventory Level" />
-            <TableColumn prefWidth="117.0" text="Price Per Unit" />
+          <TableColumn fx:id="coln_SearchPartIDAddProduct" prefWidth="113.0" text="Part ID" />
+          <TableColumn fx:id="coln_SearchPartNameAddProduct" prefWidth="121.0" text="Part Name" />
+            <TableColumn fx:id="coln_SearchInvLvlAddProduct" prefWidth="105.0" text="Inventory Level" />
+            <TableColumn fx:id="coln_SearchPricePerUnitAddProduct" prefWidth="117.0" text="Price Per Unit" />
         </columns>
       </TableView>
       <TableView fx:id="tbl_CurrentContentsAddProduct" layoutX="375.0" layoutY="341.0" prefHeight="158.0" prefWidth="457.0">
          <columns>
-            <TableColumn prefWidth="81.0" text="Part ID" />
-            <TableColumn prefWidth="107.0" text="Part Name" />
-            <TableColumn prefWidth="133.0" text="Inventory Level" />
-            <TableColumn prefWidth="135.0" text="Price Per Unit" />
+            <TableColumn fx:id="coln_CurrentContentsPartID" prefWidth="81.0" text="Part ID" />
+            <TableColumn fx:id="coln_CurrentContentsPartName" prefWidth="107.0" text="Part Name" />
+            <TableColumn fx:id="coln_CurrentContentInvLvl" prefWidth="133.0" text="Inventory Level" />
+            <TableColumn fx:id="coln_CurrentContentPricePerUnit" prefWidth="135.0" text="Price Per Unit" />
          </columns>
       </TableView>
       <Button fx:id="btn_SearchAddProduct" layoutX="494.0" layoutY="81.0" mnemonicParsing="false" text="Search" />
