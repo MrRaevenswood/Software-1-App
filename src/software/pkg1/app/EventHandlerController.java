@@ -439,6 +439,8 @@ public class EventHandlerController {
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyProductScreen));
        stage.show();
+       
+       Software1APP.setSearchIndex(tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID() - 1);
    }
    
    @FXML
@@ -774,8 +776,7 @@ public class EventHandlerController {
    @FXML
    public void populateProductToModify(){
        
-       int idIndex = Software1APP.getSearchIndex() + 1;
-       int idToSearch = -1;
+       int idIndex = Software1APP.getSearchIndex();
        
        Product prodToModify = new Product();
        
@@ -794,11 +795,81 @@ public class EventHandlerController {
        
        ObservableList list = FXCollections.observableArrayList(prodToModify.getAssociatedParts());
        
+       coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+       coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+       coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+       coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
        
-       
-       
+       tbl_AddModifyProduct.setItems(list);
        
    }
    
+   @FXML
+   public void populatePartsToAddToProduct(){   
+    
+    tbl_SearchModifyProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
+    
+     coln_partIDModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_PartNameModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_InvModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PricePerUnitModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+     tbl_SearchModifyProduct.setItems(list);
+   }
+   
+   @FXML
+   public void findPartsToBeAdded(){
+       
+       String partToSearch = txt_SearchModifyProduct.getText();
+       ArrayList<Part> partsFound = new ArrayList<Part>();
+    
+       Pattern p = Pattern.compile(partToSearch);
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           
+           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           
+           if(m.find()){
+               partsFound.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_SearchModifyProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(partsFound);
+    
+     coln_partIDModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_PartNameModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_InvModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PricePerUnitModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+    tbl_SearchModifyProduct.setItems(list);
+    
+   }
+   
+   @FXML
+   public void addPartToProduct(){
+       int idIndex = tbl_SearchModifyProduct.getSelectionModel().getSelectedItem().partID;
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           if(idIndex == Software1APP.getParts().get(i).partID){
+               Software1APP.partsToBeAssociated.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_SearchModifyProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+    
+     coln_partIDModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_PartNameModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_InvModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PricePerUnitModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+    tbl_SearchModifyProduct.setItems(list);
+     
+   }
 }
 
