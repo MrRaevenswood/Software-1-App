@@ -45,11 +45,11 @@
             <TableColumn fx:id="coln_PricePerUnitAddPartToProdInModProd" prefWidth="117.0" text="Price Per Unit" />
          </columns>
       </TableView>
-      <Button fx:id="btn_AddModifyProduct" layoutX="768.0" layoutY="254.0" mnemonicParsing="false" text="Add" />
-      <Button fx:id="btn_DeleteModifyProduct" layoutX="768.0" layoutY="474.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="btn_CancelModifyProduct" layoutX="768.0" layoutY="518.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="btn_SaveModifyProduct" layoutX="696.0" layoutY="518.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="btn_SearchModifyProduct" layoutX="530.0" layoutY="40.0" mnemonicParsing="false" text="Search" />
+      <Button fx:id="btn_AddModifyProduct" layoutX="768.0" layoutY="254.0" mnemonicParsing="false" onAction="#addPartToProduct" text="Add" />
+      <Button fx:id="btn_DeleteModifyProduct" layoutX="768.0" layoutY="474.0" mnemonicParsing="false" onAction="#deleteAssociatedPartinModProd" text="Delete" />
+      <Button fx:id="btn_CancelModifyProduct" layoutX="768.0" layoutY="518.0" mnemonicParsing="false" onAction="#closeModifyProduct" text="Cancel" />
+      <Button fx:id="btn_SaveModifyProduct" layoutX="696.0" layoutY="518.0" mnemonicParsing="false" onAction="#modifyProduct" text="Save" />
+      <Button fx:id="btn_SearchModifyProduct" layoutX="530.0" layoutY="40.0" mnemonicParsing="false" onAction="#findPartsToBeAdded" text="Search" />
       <TextField fx:id="txt_SearchModifyProduct" layoutX="633.0" layoutY="40.0" />
    </children>
 </Pane>
