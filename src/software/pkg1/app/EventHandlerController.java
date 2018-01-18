@@ -851,28 +851,23 @@ public class EventHandlerController {
    
    @FXML
    public void addPartToProduct(){
-       int idIndex = tbl_SearchModifyProduct.getSelectionModel().getSelectedItem().partID;
+       int pID = tbl_SearchModifyProduct.getSelectionModel().getSelectedItem().getPartID();
+
        
        Software1APP.partsToBeAssociated.clear();
-       Software1APP.partsToBeAssociated = (Software1APP.getProducts().get().getAssociatedParts());
+       Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(arrIndex).getAssociatedParts());
+       Software1APP.partsToBeAssociated.add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
        
-       
-       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
-           if(idIndex == Software1APP.getParts().get(i).partID){
-               Software1APP.partsToBeAssociated.add(Software1APP.getParts().get(i));
-           }
-       }
-       
-    tbl_AddModifyProduct.refresh();
+       tbl_AddModifyProduct.refresh();
      
-    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
-    
-     coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
-     coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
-     coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
-     coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
-     
-    tbl_AddModifyProduct.setItems(list);
+        ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+
+         coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+         coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+         coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+         coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+
+        tbl_AddModifyProduct.setItems(list);
      
    }
    
