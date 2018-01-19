@@ -852,10 +852,22 @@ public class EventHandlerController {
    @FXML
    public void addPartToProduct(){
        int pID = tbl_SearchModifyProduct.getSelectionModel().getSelectedItem().getPartID();
-
+       int prodId = 0;
+       
+       for(int i =0; i < Software1APP.getProducts().size(); i++){
+           Product checkProd = Software1APP.getProducts().get(i);
+           
+           if(!checkProd.getAssociatedParts().isEmpty()){
+               for (int p = 0; p < checkProd.getAssociatedParts().size(); p++){
+                   if(checkProd.getAssociatedParts().get(p).getPartID() == pID){
+                       prodId = checkProd.getProductID() - 1;
+                   }
+               }
+           }
+       }
        
        Software1APP.partsToBeAssociated.clear();
-       Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(arrIndex).getAssociatedParts());
+       Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(prodId).getAssociatedParts());
        Software1APP.partsToBeAssociated.add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
        
        tbl_AddModifyProduct.refresh();
@@ -876,7 +888,7 @@ public class EventHandlerController {
        int id = Software1APP.getSearchIndex();
        
        Product productToAdd = Software1APP.getProducts().get(id);
-       ObservableList<Part> associatedParts = tbl_AddModifyProduct.getItems();
+       ArrayList<Part> associatedParts = Software1APP.partsToBeAssociated;
        
        
        productToAdd.setName(txt_NameModifyProduct.getText());
