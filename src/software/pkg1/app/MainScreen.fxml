@@ -12,7 +12,7 @@
 <Pane fx:id="MAINSCREEN" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="1035.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.EventHandlerController">
    <children>
       <Region layoutX="32.0" layoutY="141.0" prefHeight="314.0" prefWidth="478.0" style="-fx-border-color: black;" />
-      <Region layoutX="534.0" layoutY="141.0" prefHeight="314.0" prefWidth="478.0" style="-fx-border-color: black;" />
+      <Region layoutX="531.0" layoutY="147.0" prefHeight="314.0" prefWidth="478.0" style="-fx-border-color: black;" />
       <Label layoutX="32.0" layoutY="53.0" text="Inventory Management System">
          <font>
             <Font size="18.0" />
@@ -45,7 +45,7 @@
          </columns>
       </TableView>
       <Button fx:id="btn_PARTSEARCH" layoutX="223.0" layoutY="164.0" mnemonicParsing="false" onAction="#findPart" prefHeight="27.0" prefWidth="72.0" text="Search" />
-      <Button fx:id="btn_PRODUCTSEARCH" layoutX="742.0" layoutY="164.0" mnemonicParsing="false" text="Search" />
+      <Button fx:id="btn_PRODUCTSEARCH" layoutX="742.0" layoutY="164.0" mnemonicParsing="false" onAction="#findProduct" text="Search" />
       <TextField fx:id="txt_PARTSEARCH" layoutX="322.0" layoutY="164.0" />
       <TextField fx:id="txt_PRODUCTSEARCH" layoutX="824.0" layoutY="164.0" />
       <Button fx:id="btn_PARTADD" layoutX="156.0" layoutY="417.0" mnemonicParsing="false" onAction="#openAddPartScreen" text="Add" />

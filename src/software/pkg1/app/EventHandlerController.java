@@ -25,6 +25,7 @@ import javafx.stage.*;
 import javafx.event.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javax.swing.JOptionPane;
 
 import software.pkg1.app.Software1APP;
 
@@ -245,6 +246,11 @@ public class EventHandlerController {
        
        for(Product p : Software1APP.getProducts()){
            if(p.getProductID() == idIndex){
+               
+               if(p.getAssociatedParts().isEmpty()){
+                  JOptionPane.showMessageDialog(null, "Delete all associated parts before deleting this product");
+                  return;
+               }
                Software1APP.myStock.getAllProducts().remove(p);
                break;
            }
@@ -358,6 +364,35 @@ public class EventHandlerController {
        
    }
    
+   @FXML
+   public void findProduct(){
+       String productToSearch = txt_PRODUCTSEARCH.getText();
+       ArrayList<Part> productsFound = new ArrayList<Part>();
+    
+       Pattern p = Pattern.compile(productToSearch);
+       
+       for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
+           
+           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           
+           if(m.find()){
+               productsFound.add(Software1APP.getParts().get(i));
+           }
+       }
+       
+    tbl_PRODUCTS.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(productsFound);
+    
+     coln_PRODUCTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getProductID()));
+     coln_PRODUCTNAME.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_INVENTORYLEVELPRODUCTS.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_PRICEPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+    tbl_PRODUCTS.setItems(list);
+       
+   }
+
    @FXML
    public void populateSelectedPartToModify(){
        
@@ -488,10 +523,25 @@ public class EventHandlerController {
    public void addPart(){
        
        int id;
+       int minStock = Integer.parseInt(txt_MinAddPart.getText());
+       int maxStock = Integer.parseInt(txt_MaxAddPart.getText());
+       int inventoryStock = Integer.parseInt(txt_InvAddPart.getText());
+       
        if(Software1APP.getParts().isEmpty())
            id = 1;
        else
            id = Software1APP.getParts().get(Software1APP.getParts().size() - 1).partID + 1;
+       
+       if(inventoryStock < minStock){
+           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           return;
+       }else if(inventoryStock > maxStock){
+           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+       }else if(maxStock <= minStock){
+           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+       }
+       
+       
        
        if(rb_InHouseAddPart.isSelected())
        {
@@ -722,6 +772,10 @@ public class EventHandlerController {
        Product productToAdd = new Product();
        ObservableList<Part> associatedParts = tbl_CurrentContentsAddProduct.getItems();
        
+       if(associatedParts.isEmpty()){
+           JOptionPane.showMessageDialog(null, "Please add a part to the product before saving it.");
+       }
+       
        productToAdd.setProductID(id);
        productToAdd.setName(txt_ProductNameAddProduct.getText());
        productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
@@ -784,6 +838,9 @@ public class EventHandlerController {
               break;
            }
        }
+       
+       Software1APP.partsToBeAssociated.clear();
+       Software1APP.partsToBeAssociated.addAll(prodToModify.getAssociatedParts());
        
        txt_NameModifyProduct.setText(prodToModify.getName());
        txt_InvModifyProduct.setText(Integer.toString(prodToModify.getInStock()));
@@ -864,9 +921,6 @@ public class EventHandlerController {
                }
            }
        }
-       
-       if(Software1APP.partsToBeAssociated.isEmpty())
-            Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(prodId).getAssociatedParts());
        
        Software1APP.partsToBeAssociated.add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
        
