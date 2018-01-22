@@ -250,6 +250,8 @@ public class EventHandlerController {
            }
        }
        
+       populateProductsTable();
+       
    }
    
    @FXML
