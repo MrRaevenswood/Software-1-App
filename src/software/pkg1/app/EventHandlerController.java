@@ -748,16 +748,12 @@ public class EventHandlerController {
    @FXML
    public void deleteAssociatedPart(){
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
-       int counter = 0;
        
-       for(Part p : Software1APP.getParts()){
-             
+       for(Part p : Software1APP.partsToBeAssociated){
            if(p.getPartID() == idIndex){
-               
                Software1APP.partsToBeAssociated.remove(p);
                break;
            }      
-           counter++;
        }
        
     tbl_CurrentContentsAddProduct.refresh();
@@ -836,7 +832,7 @@ public class EventHandlerController {
            }
        }
        
-    tbl_SearchModifyProduct.refresh();
+    
      
     ObservableList list = FXCollections.observableArrayList(partsFound);
     
@@ -846,6 +842,7 @@ public class EventHandlerController {
      coln_PricePerUnitModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_SearchModifyProduct.setItems(list);
+    tbl_SearchModifyProduct.refresh();
     
    }
    
@@ -866,11 +863,12 @@ public class EventHandlerController {
            }
        }
        
-       Software1APP.partsToBeAssociated.clear();
-       Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(prodId).getAssociatedParts());
+       if(Software1APP.partsToBeAssociated.isEmpty())
+            Software1APP.partsToBeAssociated.addAll(Software1APP.getProducts().get(prodId).getAssociatedParts());
+       
        Software1APP.partsToBeAssociated.add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
        
-       tbl_AddModifyProduct.refresh();
+       
      
         ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
 
@@ -880,7 +878,9 @@ public class EventHandlerController {
          coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
 
         tbl_AddModifyProduct.setItems(list);
-     
+        tbl_AddModifyProduct.refresh();
+        
+
    }
    
    @FXML
@@ -888,7 +888,6 @@ public class EventHandlerController {
        int id = Software1APP.getSearchIndex();
        
        Product productToAdd = Software1APP.getProducts().get(id);
-       ArrayList<Part> associatedParts = Software1APP.partsToBeAssociated;
        
        
        productToAdd.setName(txt_NameModifyProduct.getText());
@@ -897,12 +896,12 @@ public class EventHandlerController {
        productToAdd.setMax(Integer.parseInt(txt_MaxModifyProduct.getText()));
        productToAdd.setMin(Integer.parseInt(txt_MinModifyProduct.getText()));
        
-       for(Part p : associatedParts){
-           if(!associatedParts.contains(p)){
-               productToAdd.addAssociatedPart(p);
-           }
-       }
+       productToAdd.getAssociatedParts().clear();
        
+       for(Part p : Software1APP.partsToBeAssociated){
+          productToAdd.addAssociatedPart(p);
+       }
+           
        Software1APP.partsToBeAssociated.clear();
        
        Stage stage = (Stage) btn_SaveModifyProduct.getScene().getWindow();
@@ -914,7 +913,6 @@ public class EventHandlerController {
        int id = tbl_AddModifyProduct.getSelectionModel().getSelectedItem().getPartID();
        
        for(Part p : Software1APP.getParts()){
-             
            if(p.getPartID() == id){
                
                Software1APP.partsToBeAssociated.remove(p);
@@ -922,7 +920,7 @@ public class EventHandlerController {
            }     
        }
        
-    tbl_AddModifyProduct.refresh();
+    
      
     ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
     
@@ -932,6 +930,7 @@ public class EventHandlerController {
      coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
     
      tbl_AddModifyProduct.setItems(list);
+     tbl_AddModifyProduct.refresh();
    }
    
    @FXML
