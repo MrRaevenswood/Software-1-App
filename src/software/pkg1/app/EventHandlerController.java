@@ -537,8 +537,10 @@ public class EventHandlerController {
            return;
        }else if(inventoryStock > maxStock){
            JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           return;
        }else if(maxStock <= minStock){
            JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           return;
        }
        
        
@@ -762,6 +764,7 @@ public class EventHandlerController {
    @FXML
    public void saveProduct(){
        
+       double totalPrice = 0;
        int id;
        if(Software1APP.getProducts().isEmpty())
            id = 1;
@@ -774,7 +777,14 @@ public class EventHandlerController {
        
        if(associatedParts.isEmpty()){
            JOptionPane.showMessageDialog(null, "Please add a part to the product before saving it.");
+           return;
        }
+       
+       for(Part p : associatedParts){
+           totalPrice += p.price;
+       }
+       
+       
        
        productToAdd.setProductID(id);
        productToAdd.setName(txt_ProductNameAddProduct.getText());
@@ -785,6 +795,20 @@ public class EventHandlerController {
        
        for(Part p : associatedParts){
            productToAdd.addAssociatedPart(p);
+       }
+       
+       if(totalPrice > productToAdd.getPrice()){
+           JOptionPane.showMessageDialog(null, "The Product Price can not be less than the combined price of all of its parts.");
+           return;
+       }else if(productToAdd.getName().isEmpty()){
+           JOptionPane.showMessageDialog(null, "Product must have a name");
+           return;
+       }else if(txt_PriceAddProduct.getText().isEmpty()){
+           JOptionPane.showMessageDialog(null, "Product must have a price");
+           return;
+       }else if(txt_InvAddProduct.getText().isEmpty() || Integer.parseInt(txt_InvAddProduct.getText()) < 0){
+           JOptionPane.showMessageDialog(null, "Inventory value must be 0 or higher");
+           return;
        }
        
        Software1APP.myStock.addProduct(productToAdd);
