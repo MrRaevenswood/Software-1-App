@@ -244,20 +244,22 @@ public class EventHandlerController {
    public void deleteProduct(){
        int idIndex = tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID();
        
-       for(Product p : Software1APP.getProducts()){
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this Product");
+       if(result == JOptionPane.YES_OPTION){
+           for(Product p : Software1APP.getProducts()){
            if(p.getProductID() == idIndex){
                
-               if(p.getAssociatedParts().isEmpty()){
+               if(!p.getAssociatedParts().isEmpty()){
                   JOptionPane.showMessageDialog(null, "Delete all associated parts before deleting this product");
                   return;
                }
                Software1APP.myStock.getAllProducts().remove(p);
                break;
+                }
            }
+       
+            populateProductsTable();
        }
-       
-       populateProductsTable();
-       
    }
    
    @FXML
@@ -267,6 +269,11 @@ public class EventHandlerController {
        int idToSearch = -1;
        int machId = -1;
        String companyName = "";
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this Part");
+       if(result == JOptionPane.YES_OPTION){
+           return;
+       }
        
        for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
            System.out.println("InPart Part ID " + Software1APP.getInPart().get(i).partID);
@@ -512,7 +519,12 @@ public class EventHandlerController {
    
    @FXML
    public void closeProgram() throws IOException{
-       System.exit(0);
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to close the Program?");
+       if(result == JOptionPane.YES_OPTION){
+           System.exit(0);
+       }
+       
    }
    
    
@@ -585,8 +597,13 @@ public class EventHandlerController {
    
   @FXML
    public void cancelAddPart(){
-       Stage stage = (Stage) btn_AddPartCancelAddPart.getScene().getWindow();
-       stage.close();
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Part?");
+       if(result == JOptionPane.YES_OPTION){
+            Stage stage = (Stage) btn_AddPartCancelAddPart.getScene().getWindow();
+            stage.close();
+       }
+       
    }
    
    @FXML
@@ -629,6 +646,22 @@ public class EventHandlerController {
        int outPartSearchIndex = 0;
        int inPartSearchIndex = 0; 
        int partId = Software1APP.getParts().get(searchIndex).partID;
+       
+       int minStock = Integer.parseInt(txt_MinModifyPart.getText());
+       int maxStock = Integer.parseInt(txt_MaxModifyPart.getText());
+       int inventoryStock = Integer.parseInt(txt_InvModifyPart.getText());
+       
+       if(inventoryStock < minStock){
+           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           return;
+       }else if(inventoryStock > maxStock){
+           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           return;
+       }else if(maxStock <= minStock){
+           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           return;
+       }
+       
        
        if(rb_InHouseModifyPart.isSelected()){
            
@@ -687,8 +720,12 @@ public class EventHandlerController {
    @FXML
    public void cancelModifyPart(){
        
-       Stage stage = (Stage) btn_CancelModifyPart.getScene().getWindow();
-       stage.close();
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to modify a Part?");
+       if(result == JOptionPane.YES_OPTION){
+            Stage stage = (Stage) btn_CancelModifyPart.getScene().getWindow();
+            stage.close();
+       }
+
    }
    
    //Add Product Screen Events
@@ -771,6 +808,22 @@ public class EventHandlerController {
        else
            id = Software1APP.getProducts().get(Software1APP.getProducts().size() - 1).getProductID() + 1;
        
+       int minStock = Integer.parseInt(txt_MinAddProduct.getText());
+       int maxStock = Integer.parseInt(txt_MaxAddProduct.getText());
+       int inventoryStock = Integer.parseInt(txt_InvAddProduct.getText());
+       
+       if(inventoryStock < minStock){
+           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           return;
+       }else if(inventoryStock > maxStock){
+           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           return;
+       }else if(maxStock <= minStock){
+           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           return;
+       }
+       
+       
        
        Product productToAdd = new Product();
        ObservableList<Part> associatedParts = tbl_CurrentContentsAddProduct.getItems();
@@ -788,8 +841,17 @@ public class EventHandlerController {
        
        productToAdd.setProductID(id);
        productToAdd.setName(txt_ProductNameAddProduct.getText());
-       productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
-       productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
+       
+       if(!txt_InvAddProduct.getText().isEmpty())
+            productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
+       
+       if(!txt_PriceAddProduct.getText().isEmpty())
+            productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
+       else{
+           JOptionPane.showMessageDialog(null, "Product must have a price");
+           return;
+       }
+           
        productToAdd.setMax(Integer.parseInt(txt_MaxAddProduct.getText()));
        productToAdd.setMin(Integer.parseInt(txt_MinAddProduct.getText()));
        
@@ -821,13 +883,23 @@ public class EventHandlerController {
    
    @FXML
    public void cancelAddProduct(){
-       Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
-       stage.close();
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Product?");
+       if(result == JOptionPane.YES_OPTION){
+            Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
+            stage.close();
+       }
+
    }
    
    @FXML
    public void deleteAssociatedPart(){
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated part?");
+       if(result == JOptionPane.YES_OPTION){
+           return; 
+       }
        
        for(Part p : Software1APP.partsToBeAssociated){
            if(p.getPartID() == idIndex){
@@ -967,6 +1039,22 @@ public class EventHandlerController {
    public void modifyProduct(){
        int id = Software1APP.getSearchIndex();
        
+       int minStock = Integer.parseInt(txt_MinModifyProduct.getText());
+       int maxStock = Integer.parseInt(txt_MaxModifyProduct.getText());
+       int inventoryStock = Integer.parseInt(txt_InvModifyProduct.getText());
+       
+       if(inventoryStock < minStock){
+           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           return;
+       }else if(inventoryStock > maxStock){
+           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           return;
+       }else if(maxStock <= minStock){
+           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           return;
+       }
+       
+       
        Product productToAdd = Software1APP.getProducts().get(id);
        
        
@@ -992,6 +1080,11 @@ public class EventHandlerController {
    public void deleteAssociatedPartinModProd(){
        int id = tbl_AddModifyProduct.getSelectionModel().getSelectedItem().getPartID();
        
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated Part?");
+       if(result == JOptionPane.YES_OPTION){
+           return;
+       }
+       
        for(Part p : Software1APP.getParts()){
            if(p.getPartID() == id){
                
@@ -1015,8 +1108,13 @@ public class EventHandlerController {
    
    @FXML
    public void closeModifyProduct(){
-       Stage stage = (Stage) btn_CancelModifyProduct.getScene().getWindow();
-       stage.close();
+       
+       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Product?");
+       if(result == JOptionPane.YES_OPTION){
+            Stage stage = (Stage) btn_CancelModifyProduct.getScene().getWindow();
+            stage.close();
+       }
+
    }
 }
 
