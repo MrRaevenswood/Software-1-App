@@ -109,11 +109,19 @@ public class ModifyPartScreenController implements Initializable {
        String companyName = Software1APP.getCompNameToModify();
        
        if(machId == -1){
+           lbl_MachIdModifyPart.setVisible(false);
+           lbl_CompNameModifyPart.setVisible(true);
+           txt_MachIdModifyPart.setVisible(false);
+           txt_CompanyNameModifyPart.setVisible(true);
            txt_CompanyNameModifyPart.setText(companyName);
            rb_OutsourcedModifyPart.setSelected(true);
            rb_InHouseModifyPart.setDisable(true);
        }
        else{
+           lbl_MachIdModifyPart.setVisible(true);
+           lbl_CompNameModifyPart.setVisible(false);
+           txt_MachIdModifyPart.setVisible(true);
+           txt_CompanyNameModifyPart.setVisible(false);
            txt_MachIdModifyPart.setText(Integer.toString(machId));
            rb_InHouseModifyPart.setSelected(true);
            rb_OutsourcedModifyPart.setDisable(true);

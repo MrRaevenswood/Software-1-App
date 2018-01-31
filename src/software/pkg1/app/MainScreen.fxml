@@ -28,7 +28,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TableView fx:id="tbl_PARTS" layoutX="53.0" layoutY="204.0" onMouseEntered="#populatePartsTable" prefHeight="200.0" prefWidth="436.0">
+      <TableView fx:id="tbl_PARTS" layoutX="53.0" layoutY="204.0" onMouseClicked="#populatePartsTable" prefHeight="200.0" prefWidth="436.0">
         <columns>
           <TableColumn fx:id="coln_PARTID" prefWidth="75.0" text="Part ID" />
           <TableColumn fx:id="coln_PARTNAME" prefWidth="98.0" text="Part Name" />

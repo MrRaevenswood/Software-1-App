@@ -135,6 +135,9 @@ public class AddProductScreenController implements Initializable {
      coln_SearchPricePerUnitAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_SearchTableAddProduct.setItems(list);
+    
+    JOptionPane.showMessageDialog(null, "If part was found, it will be displayed in the table below. To refresh the table with all parts"
+            + ", click on an empty spot on the table");
        
    }
    
@@ -237,7 +240,7 @@ public class AddProductScreenController implements Initializable {
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
        
        int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated part?");
-       if(result == JOptionPane.YES_OPTION){
+       if(result == JOptionPane.NO_OPTION){
            return; 
        }
        
@@ -263,6 +266,17 @@ public class AddProductScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
+     tbl_SearchTableAddProduct.refresh();
+     
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getParts());
+    
+     coln_SearchPartIDAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+     coln_SearchPartNameAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+     coln_SearchInvLvlAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+     coln_SearchPricePerUnitAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+     
+     tbl_SearchTableAddProduct.setItems(list);
         
     }
     

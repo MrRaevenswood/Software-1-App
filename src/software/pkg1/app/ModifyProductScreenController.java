@@ -94,14 +94,25 @@ public class ModifyProductScreenController implements Initializable {
        txt_MaxModifyProduct.setText(Integer.toString(prodToModify.getMax()));
        txt_MinModifyProduct.setText(Integer.toString(prodToModify.getMin()));
        
-       ObservableList list = FXCollections.observableArrayList(prodToModify.getAssociatedParts());
+       ObservableList listForAddModProdTable = FXCollections.observableArrayList(prodToModify.getAssociatedParts());
        
        coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
        coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
        coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
        coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
        
-       tbl_AddModifyProduct.setItems(list);
+       tbl_AddModifyProduct.setItems(listForAddModProdTable);
+       
+       tbl_SearchModifyProduct.refresh();
+     
+       ObservableList listForSearchModProdTable = FXCollections.observableArrayList(Software1APP.getParts());
+
+         coln_partIDModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+         coln_PartNameModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+         coln_InvModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+         coln_PricePerUnitModifyProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+
+       tbl_SearchModifyProduct.setItems(listForSearchModProdTable);
     }
     
    @FXML
@@ -148,6 +159,8 @@ public class ModifyProductScreenController implements Initializable {
     tbl_SearchModifyProduct.setItems(list);
     tbl_SearchModifyProduct.refresh();
     
+     JOptionPane.showMessageDialog(null, "If part was found, it will be displayed in the table below. To refresh the table with all parts"
+            + ", click on an empty spot on the table");
    }
    
    @FXML
@@ -230,7 +243,7 @@ public class ModifyProductScreenController implements Initializable {
        int id = tbl_AddModifyProduct.getSelectionModel().getSelectedItem().getPartID();
        
        int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated Part?");
-       if(result == JOptionPane.YES_OPTION){
+       if(result == JOptionPane.NO_OPTION){
            return;
        }
        

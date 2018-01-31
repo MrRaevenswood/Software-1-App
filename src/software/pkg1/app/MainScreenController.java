@@ -83,12 +83,14 @@ public class MainScreenController implements Initializable{
    
   @FXML
    public void openModifyPartScreen() throws IOException{
+       Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().partID - 1);
+       
        Parent modifyPartScreen = FXMLLoader.load(getClass().getResource("ModifyPartScreen.fxml"));
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyPartScreen));
        stage.show();
        
-       Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().partID - 1);
+       
 
    }
    
@@ -122,7 +124,7 @@ public class MainScreenController implements Initializable{
        int machId = -1;
        
        int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this Part");
-       if(result == JOptionPane.YES_OPTION){
+       if(result == JOptionPane.NO_OPTION){
            return;
        }
        
@@ -193,7 +195,7 @@ public class MainScreenController implements Initializable{
    @FXML
    public void findPart(){
        String partToSearch = txt_PARTSEARCH.getText();
-       ArrayList<Part> partsFound = new ArrayList<Part>();
+       ArrayList<Part> partsFound = new ArrayList<>();
     
        Pattern p = Pattern.compile(partToSearch);
        
@@ -216,13 +218,15 @@ public class MainScreenController implements Initializable{
      coln_PRICECOSTPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_PARTS.setItems(list);
-       
+     
+    JOptionPane.showMessageDialog(null, "If parts were found, they will be displayed in the table below."
+            + " To refresh the table, click on an empty space in the table to repopulate with all parts.");
    }
    
    @FXML
    public void findProduct(){
        String productToSearch = txt_PRODUCTSEARCH.getText();
-       ArrayList<Part> productsFound = new ArrayList<Part>();
+       ArrayList<Part> productsFound = new ArrayList<>();
     
        Pattern p = Pattern.compile(productToSearch);
        
@@ -245,24 +249,22 @@ public class MainScreenController implements Initializable{
      coln_PRICEPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_PRODUCTS.setItems(list);
+    
+    JOptionPane.showMessageDialog(null, "If products were found, they will be displayed in the table below."
+            + " To refresh the table, click on an empty space in the table to repopulate with all products.");
        
    }
-
-   @FXML
-   public void populateSelectedPartToModify(){
-       
-       
-   }
-   
-   
+    
    @FXML
    public void openModifyProductScreen() throws IOException{
+       Software1APP.setSearchIndex(tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID() - 1);
+       
        Parent modifyProductScreen = FXMLLoader.load(getClass().getResource("ModifyProductScreen.fxml"));
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyProductScreen));
        stage.show();
        
-       Software1APP.setSearchIndex(tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID() - 1);
+       
    }
    
    @FXML
@@ -303,10 +305,5 @@ public class MainScreenController implements Initializable{
            System.exit(0);
        }
        
-   }
-   
-   
-   
-   
-    
+   }    
 }
