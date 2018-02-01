@@ -6,10 +6,14 @@
 package software.pkg1.app;
 
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -73,13 +77,28 @@ public class AddPartScreenController implements Initializable{
            id = Software1APP.getParts().get(Software1APP.getParts().size() - 1).partID + 1;
        
        if(inventoryStock < minStock){
-           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Your inventory cannot be lower than the minimum.");
+           alert.showAndWait(); 
+            
            return;
        }else if(inventoryStock > maxStock){
-           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Inventory cannot be greater than the maximum stock value.");
+           alert.showAndWait(); 
+           
            return;
        }else if(maxStock <= minStock){
-           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait(); 
+
            return;
        }
        
@@ -125,13 +144,19 @@ public class AddPartScreenController implements Initializable{
    
   @FXML
    public void cancelAddPart(){
+      
+       Alert alert = new Alert(AlertType.CONFIRMATION);
+       alert.setTitle("Stop Adding Part?");
+       alert.setHeaderText("Part Add Cancel");
+       alert.setContentText("Would you like to stop trying to add a Part?");
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Part?");
-       if(result == JOptionPane.YES_OPTION){
+       Optional<ButtonType> result = alert.showAndWait();
+       
+       if(result.get() == ButtonType.OK){
             Stage stage = (Stage) btn_AddPartCancelAddPart.getScene().getWindow();
             stage.close();
-       }
-       
+       }else
+           alert.close();
    }
    
    @FXML

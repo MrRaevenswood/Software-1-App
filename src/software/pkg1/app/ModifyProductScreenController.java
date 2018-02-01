@@ -7,6 +7,7 @@ package software.pkg1.app;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -159,8 +163,6 @@ public class ModifyProductScreenController implements Initializable {
     tbl_SearchModifyProduct.setItems(list);
     tbl_SearchModifyProduct.refresh();
     
-     JOptionPane.showMessageDialog(null, "If part was found, it will be displayed in the table below. To refresh the table with all parts"
-            + ", click on an empty spot on the table");
    }
    
    @FXML
@@ -206,13 +208,27 @@ public class ModifyProductScreenController implements Initializable {
        int inventoryStock = Integer.parseInt(txt_InvModifyProduct.getText());
        
        if(inventoryStock < minStock){
-           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Your inventory cannot be lower than the minimum.");
+           alert.showAndWait();
            return;
        }else if(inventoryStock > maxStock){
-           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Inventory cannot be greater than the maximum stock value");
+           alert.showAndWait();
+           
            return;
        }else if(maxStock <= minStock){
-           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait();
+
            return;
        }
        
@@ -242,10 +258,21 @@ public class ModifyProductScreenController implements Initializable {
    public void deleteAssociatedPartinModProd(){
        int id = tbl_AddModifyProduct.getSelectionModel().getSelectedItem().getPartID();
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated Part?");
-       if(result == JOptionPane.NO_OPTION){
+       
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to delete this associated Part?");
+           
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+       
+       Optional<ButtonType> result = alert.showAndWait();
+       
+       if(result.get() == noButton){
            return;
-       }
+       }else if(result.get() == yesButton){
        
        for(Part p : Software1APP.getParts()){
            if(p.getPartID() == id){
@@ -266,16 +293,28 @@ public class ModifyProductScreenController implements Initializable {
     
      tbl_AddModifyProduct.setItems(list);
      tbl_AddModifyProduct.refresh();
-   }
-   
+   }else
+           alert.close();
+ }  
    @FXML
    public void closeModifyProduct(){
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Product?");
-       if(result == JOptionPane.YES_OPTION){
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to stop trying to add a Product?");
+           
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+       
+       Optional<ButtonType> result = alert.showAndWait();
+      
+       if(result.get() == yesButton){
             Stage stage = (Stage) btn_CancelModifyProduct.getScene().getWindow();
             stage.close();
-       }
+       }else
+           alert.close();
 
    }
 

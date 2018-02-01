@@ -7,6 +7,7 @@ package software.pkg1.app;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +16,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -135,9 +139,6 @@ public class AddProductScreenController implements Initializable {
      coln_SearchPricePerUnitAddProduct.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_SearchTableAddProduct.setItems(list);
-    
-    JOptionPane.showMessageDialog(null, "If part was found, it will be displayed in the table below. To refresh the table with all parts"
-            + ", click on an empty spot on the table");
        
    }
    
@@ -156,13 +157,28 @@ public class AddProductScreenController implements Initializable {
        int inventoryStock = Integer.parseInt(txt_InvAddProduct.getText());
        
        if(inventoryStock < minStock){
-           JOptionPane.showMessageDialog(null, "Your inventory cannot be lower than the minimum.");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Your inventory cannot be lower than the minimum.");
+           alert.showAndWait();
+          
            return;
        }else if(inventoryStock > maxStock){
-           JOptionPane.showMessageDialog(null, "Inventory cannot be greater than the maximum stock value");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Inventory cannot be greater than the maximum stock value");
+           alert.showAndWait();
+           
            return;
        }else if(maxStock <= minStock){
-           JOptionPane.showMessageDialog(null, "The minimum cannot be equal or greater than the max");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait();
+           
            return;
        }
        
@@ -172,7 +188,12 @@ public class AddProductScreenController implements Initializable {
        ObservableList<Part> associatedParts = tbl_CurrentContentsAddProduct.getItems();
        
        if(associatedParts.isEmpty()){
-           JOptionPane.showMessageDialog(null, "Please add a part to the product before saving it.");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Please add a part to the product before saving it.");
+           alert.showAndWait();
+                
            return;
        }
        
@@ -191,7 +212,12 @@ public class AddProductScreenController implements Initializable {
        if(!txt_PriceAddProduct.getText().isEmpty())
             productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
        else{
-           JOptionPane.showMessageDialog(null, "Product must have a price");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a price");
+           alert.showAndWait();
+           
            return;
        }
            
@@ -203,16 +229,35 @@ public class AddProductScreenController implements Initializable {
        }
        
        if(totalPrice > productToAdd.getPrice()){
-           JOptionPane.showMessageDialog(null, "The Product Price can not be less than the combined price of all of its parts.");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The Product Price can not be less than the combined price of all of its parts.");
+           alert.showAndWait();
            return;
        }else if(productToAdd.getName().isEmpty()){
-           JOptionPane.showMessageDialog(null, "Product must have a name");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a name");
+           alert.showAndWait();
+           
            return;
        }else if(txt_PriceAddProduct.getText().isEmpty()){
-           JOptionPane.showMessageDialog(null, "Product must have a price");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a price");
+           alert.showAndWait();
+           
            return;
        }else if(txt_InvAddProduct.getText().isEmpty() || Integer.parseInt(txt_InvAddProduct.getText()) < 0){
-           JOptionPane.showMessageDialog(null, "Inventory value must be 0 or higher");
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Inventory value must be 0 or higher");
+           alert.showAndWait();
+           
            return;
        }
        
@@ -227,11 +272,18 @@ public class AddProductScreenController implements Initializable {
    @FXML
    public void cancelAddProduct(){
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to stop trying to add a Product?");
-       if(result == JOptionPane.YES_OPTION){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to stop trying to add a Product?");
+           alert.showAndWait();
+       
+       Optional<ButtonType> result = alert.showAndWait();
+       if(result.get() == ButtonType.OK){
             Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
             stage.close();
-       }
+       }else
+           alert.close();
 
    }
    
@@ -239,11 +291,22 @@ public class AddProductScreenController implements Initializable {
    public void deleteAssociatedPart(){
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this associated part?");
-       if(result == JOptionPane.NO_OPTION){
-           return; 
-       }
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to delete this associated part?");
+           alert.showAndWait();
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
        
+       Optional<ButtonType> result = alert.showAndWait();
+       if(result.get() == noButton){
+            Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
+            stage.close();
+            return;
+       }else if(result.get() == yesButton){
+        
        for(Part p : Software1APP.partsToBeAssociated){
            if(p.getPartID() == idIndex){
                Software1APP.partsToBeAssociated.remove(p);
@@ -262,7 +325,9 @@ public class AddProductScreenController implements Initializable {
     
      tbl_CurrentContentsAddProduct.setItems(list);
      
-   }
+   }else
+           alert.close();
+}
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

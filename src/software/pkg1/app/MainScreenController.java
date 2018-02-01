@@ -8,6 +8,7 @@ package software.pkg1.app;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,6 +20,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -97,9 +101,19 @@ public class MainScreenController implements Initializable{
    @FXML
    public void deleteProduct(){
        int idIndex = tbl_PRODUCTS.getSelectionModel().getSelectedItem().getProductID();
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to delete this Product?");
+           alert.showAndWait();
+           
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this Product");
-       if(result == JOptionPane.YES_OPTION){
+       Optional<ButtonType> result = alert.showAndWait();
+       
+       if(result.get() == yesButton){
            for(Product p : Software1APP.getProducts()){
            if(p.getProductID() == idIndex){
                
@@ -113,6 +127,8 @@ public class MainScreenController implements Initializable{
            }
        
             populateProductsTable();
+       }else {
+           alert.close();
        }
    }
    
@@ -123,10 +139,21 @@ public class MainScreenController implements Initializable{
        int idToSearch = -1;
        int machId = -1;
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to delete this Part");
-       if(result == JOptionPane.NO_OPTION){
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to delete this Part?");
+           alert.showAndWait();
+           
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+       
+       Optional<ButtonType> result = alert.showAndWait();
+       
+       if(result.get() == noButton){
            return;
-       }
+       }else if (result.get() == yesButton){
        
        for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
            System.out.println("InPart Part ID " + Software1APP.getInPart().get(i).partID);
@@ -148,8 +175,7 @@ public class MainScreenController implements Initializable{
                break;
            }
        }
-       System.out.println("id Index " + idIndex);
-       System.out.println("Current id to search " + idToSearch);
+
        if(idToSearch == -1){
            for(int i = 0; i <= Software1APP.getOutPart().size() - 1; i++){
                System.out.println("OutPart Part ID " + Software1APP.getOutPart().get(i).partID);
@@ -190,8 +216,10 @@ public class MainScreenController implements Initializable{
        else{
            Software1APP.deleteInPart(idToSearch);
        }
-   }
-   
+   }else
+           alert.close(); 
+       
+}  
    @FXML
    public void findPart(){
        String partToSearch = txt_PARTSEARCH.getText();
@@ -218,10 +246,8 @@ public class MainScreenController implements Initializable{
      coln_PRICECOSTPERUNIT.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
      
     tbl_PARTS.setItems(list);
-     
-    JOptionPane.showMessageDialog(null, "If parts were found, they will be displayed in the table below."
-            + " To refresh the table, click on an empty space in the table to repopulate with all parts.");
-   }
+
+}
    
    @FXML
    public void findProduct(){
@@ -250,8 +276,6 @@ public class MainScreenController implements Initializable{
      
     tbl_PRODUCTS.setItems(list);
     
-    JOptionPane.showMessageDialog(null, "If products were found, they will be displayed in the table below."
-            + " To refresh the table, click on an empty space in the table to repopulate with all products.");
        
    }
     
@@ -300,10 +324,22 @@ public class MainScreenController implements Initializable{
    @FXML
    public void closeProgram() throws IOException{
        
-       int result = JOptionPane.showConfirmDialog(null, "Would you like to close the Program?");
-       if(result == JOptionPane.YES_OPTION){
+       Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Would you like to close the Program?");
+           alert.showAndWait();
+           
+        ButtonType yesButton = new ButtonType("Yes");
+        ButtonType noButton = new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+       
+       Optional<ButtonType> result = alert.showAndWait();
+       
+       if(result.get() == yesButton){
            System.exit(0);
-       }
+       }else
+           alert.close();
        
    }    
 }
