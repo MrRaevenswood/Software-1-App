@@ -79,7 +79,7 @@ public class ModifyProductScreenController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         int idIndex = Software1APP.getSearchIndex();
-       System.out.println("Index: " + idIndex);
+
        Product prodToModify = new Product();
        
        for(Product p: Software1APP.getProducts()){
@@ -89,8 +89,8 @@ public class ModifyProductScreenController implements Initializable {
            }
        }
        
-       Software1APP.partsToBeAssociated.clear();
-       Software1APP.partsToBeAssociated.addAll(prodToModify.getAssociatedParts());
+       Software1APP.getPartsToBeAssociated().clear();
+       Software1APP.getPartsToBeAssociated().addAll(prodToModify.getAssociatedParts());
        
        txt_NameModifyProduct.setText(prodToModify.getName());
        txt_InvModifyProduct.setText(Integer.toString(prodToModify.getInStock()));
@@ -144,7 +144,7 @@ public class ModifyProductScreenController implements Initializable {
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
            
-           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           Matcher m = p.matcher(Software1APP.getParts().get(i).getName());
            
            if(m.find()){
                partsFound.add(Software1APP.getParts().get(i));
@@ -182,11 +182,11 @@ public class ModifyProductScreenController implements Initializable {
            }
        }
        
-       Software1APP.partsToBeAssociated.add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
+       Software1APP.getPartsToBeAssociated().add(tbl_SearchModifyProduct.getSelectionModel().getSelectedItem());
        
        
      
-        ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+        ObservableList list = FXCollections.observableArrayList(Software1APP.getPartsToBeAssociated());
 
          coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
          coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
@@ -202,12 +202,21 @@ public class ModifyProductScreenController implements Initializable {
    @FXML
    public void modifyProduct(){
        int id = Software1APP.getSearchIndex();
-       
+       Product productToAdd = Software1APP.getProducts().get(id);
        int minStock = Integer.parseInt(txt_MinModifyProduct.getText());
        int maxStock = Integer.parseInt(txt_MaxModifyProduct.getText());
        int inventoryStock = Integer.parseInt(txt_InvModifyProduct.getText());
+       double totalPrice = 
        
-       if(inventoryStock < minStock){
+       if(maxStock <= minStock){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait();
+
+           return;
+       }else if(inventoryStock < minStock){
             Alert alert = new Alert(Alert.AlertType.ERROR);
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
@@ -222,18 +231,73 @@ public class ModifyProductScreenController implements Initializable {
            alert.showAndWait();
            
            return;
-       }else if(maxStock <= minStock){
+       }
+      
+       
+        if(totalPrice > productToAdd.getPrice()){
            Alert alert = new Alert(Alert.AlertType.ERROR);
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
-           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.setContentText("The Product Price can not be less than the combined price of all of its parts.");
            alert.showAndWait();
-
+           return;
+       }else if(productToAdd.getName().isEmpty()){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a name");
+           alert.showAndWait();
+           
+           return;
+       }else if(txt_PriceAddProduct.getText().isEmpty()){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a price");
+           alert.showAndWait();
+           
+           return;
+       }
+        
+        
+       ObservableList<Part> associatedParts = tbl_SearchModifyProduct.getItems();
+       
+       if(associatedParts.isEmpty()){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Please add a part to the product before saving it.");
+           alert.showAndWait();
+                
+           return;
+       }
+       
+       for(Part p : associatedParts){
+           totalPrice += p.getPrice();
+       }
+       
+       
+       
+       productToAdd.setProductID(id);
+       productToAdd.setName(txt_ProductNameAddProduct.getText());
+       
+       if(!txt_InvAddProduct.getText().isEmpty())
+            productToAdd.setInStock(Integer.parseInt(txt_InvAddProduct.getText()));
+       
+       if(!txt_PriceAddProduct.getText().isEmpty())
+            productToAdd.setPrice(Double.parseDouble(txt_PriceAddProduct.getText()));
+       else{
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Product must have a price");
+           alert.showAndWait();
+           
            return;
        }
        
        
-       Product productToAdd = Software1APP.getProducts().get(id);
+       
        
        
        productToAdd.setName(txt_NameModifyProduct.getText());
@@ -244,11 +308,11 @@ public class ModifyProductScreenController implements Initializable {
        
        productToAdd.getAssociatedParts().clear();
        
-       for(Part p : Software1APP.partsToBeAssociated){
+       for(Part p : Software1APP.getPartsToBeAssociated()){
           productToAdd.addAssociatedPart(p);
        }
            
-       Software1APP.partsToBeAssociated.clear();
+       Software1APP.getPartsToBeAssociated().clear();
        
        Stage stage = (Stage) btn_SaveModifyProduct.getScene().getWindow();
        stage.close();
@@ -260,39 +324,34 @@ public class ModifyProductScreenController implements Initializable {
        
        
        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
+           alert.setTitle("Warning");
+           alert.setHeaderText("Deletion Request");
            alert.setContentText("Would you like to delete this associated Part?");
-           
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
        
        Optional<ButtonType> result = alert.showAndWait();
        
-       if(result.get() == noButton){
+       if(result.get() == ButtonType.CANCEL){
+           alert.close();
            return;
-       }else if(result.get() == yesButton){
+       }else if(result.get() == ButtonType.OK){
        
        for(Part p : Software1APP.getParts()){
            if(p.getPartID() == id){
                
-               Software1APP.partsToBeAssociated.remove(p);
+               Software1APP.getPartsToBeAssociated().remove(p);
                break;
            }     
        }
-       
-    
      
-    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
-    
-     coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
-     coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
-     coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
-     coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
-    
-     tbl_AddModifyProduct.setItems(list);
-     tbl_AddModifyProduct.refresh();
+        ObservableList list = FXCollections.observableArrayList(Software1APP.getPartsToBeAssociated());
+
+         coln_PartIDAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
+         coln_PartNameAddPartToProdinModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
+         coln_InvLevelAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getInStock()));
+         coln_PricePerUnitAddPartToProdInModProd.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Double>(cellData.getValue().getPrice()));
+
+         tbl_AddModifyProduct.setItems(list);
+         tbl_AddModifyProduct.refresh();
    }else
            alert.close();
  }  
@@ -300,17 +359,13 @@ public class ModifyProductScreenController implements Initializable {
    public void closeModifyProduct(){
        
        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
+           alert.setTitle("Warning");
+           alert.setHeaderText("Cancellation Request");
            alert.setContentText("Would you like to stop trying to add a Product?");
-           
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-       
+          
        Optional<ButtonType> result = alert.showAndWait();
       
-       if(result.get() == yesButton){
+       if(result.get() == ButtonType.OK){
             Stage stage = (Stage) btn_CancelModifyProduct.getScene().getWindow();
             stage.close();
        }else

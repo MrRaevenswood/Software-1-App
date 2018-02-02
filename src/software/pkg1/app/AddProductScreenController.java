@@ -92,17 +92,17 @@ public class AddProductScreenController implements Initializable {
    @FXML
    public void populateAssociatedPartsTable(){
        
-       int idIndex = tbl_SearchTableAddProduct.getSelectionModel().getSelectedItem().partID;
+       int idIndex = tbl_SearchTableAddProduct.getSelectionModel().getSelectedItem().getPartID();
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
-           if(idIndex == Software1APP.getParts().get(i).partID){
-               Software1APP.partsToBeAssociated.add(Software1APP.getParts().get(i));
+           if(idIndex == Software1APP.getParts().get(i).getPartID()){
+               Software1APP.getPartsToBeAssociated().add(Software1APP.getParts().get(i));
            }
        }
        
     tbl_CurrentContentsAddProduct.refresh();
      
-    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getPartsToBeAssociated());
     
      coln_CurrentContentsPartID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
      coln_CurrentContentsPartName.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
@@ -122,7 +122,7 @@ public class AddProductScreenController implements Initializable {
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
            
-           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           Matcher m = p.matcher(Software1APP.getParts().get(i).getName());
            
            if(m.find()){
                partsFound.add(Software1APP.getParts().get(i));
@@ -154,9 +154,29 @@ public class AddProductScreenController implements Initializable {
        
        int minStock = Integer.parseInt(txt_MinAddProduct.getText());
        int maxStock = Integer.parseInt(txt_MaxAddProduct.getText());
+    
+       if(txt_InvAddProduct.getText().isEmpty() || Integer.parseInt(txt_InvAddProduct.getText()) < 0){
+           
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Inventory value must be 0 or higher");
+           alert.showAndWait();
+           
+           return;
+           
+       }
        int inventoryStock = Integer.parseInt(txt_InvAddProduct.getText());
        
-       if(inventoryStock < minStock){
+       if(maxStock <= minStock){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait();
+           
+           return;
+       }else if(inventoryStock < minStock){
            Alert alert = new Alert(Alert.AlertType.ERROR);
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
@@ -169,14 +189,6 @@ public class AddProductScreenController implements Initializable {
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
            alert.setContentText("Inventory cannot be greater than the maximum stock value");
-           alert.showAndWait();
-           
-           return;
-       }else if(maxStock <= minStock){
-           Alert alert = new Alert(Alert.AlertType.ERROR);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
-           alert.setContentText("The minimum cannot be equal or greater than the max");
            alert.showAndWait();
            
            return;
@@ -198,7 +210,7 @@ public class AddProductScreenController implements Initializable {
        }
        
        for(Part p : associatedParts){
-           totalPrice += p.price;
+           totalPrice += p.getPrice();
        }
        
        
@@ -251,18 +263,10 @@ public class AddProductScreenController implements Initializable {
            alert.showAndWait();
            
            return;
-       }else if(txt_InvAddProduct.getText().isEmpty() || Integer.parseInt(txt_InvAddProduct.getText()) < 0){
-           Alert alert = new Alert(Alert.AlertType.ERROR);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
-           alert.setContentText("Inventory value must be 0 or higher");
-           alert.showAndWait();
-           
-           return;
        }
        
-       Software1APP.myStock.addProduct(productToAdd);
-       Software1APP.partsToBeAssociated.clear();
+       Software1APP.getMyStock().addProduct(productToAdd);
+       Software1APP.getPartsToBeAssociated().clear();
        
        Stage stage = (Stage) btn_SaveAddProduct.getScene().getWindow();
        stage.close();
@@ -273,8 +277,8 @@ public class AddProductScreenController implements Initializable {
    public void cancelAddProduct(){
        
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
+           alert.setTitle("Warning");
+           alert.setHeaderText("Cancelation Request");
            alert.setContentText("Would you like to stop trying to add a Product?");
            alert.showAndWait();
        
@@ -292,31 +296,27 @@ public class AddProductScreenController implements Initializable {
        int idIndex = tbl_CurrentContentsAddProduct.getSelectionModel().getSelectedItem().getPartID();
        
        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
-           alert.setContentText("Would you like to delete this associated part?");
-           alert.showAndWait();
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+           alert.setTitle("Warning");
+           alert.setHeaderText("Deletion Request");
+           alert.setContentText("Would you like to delete this associated Part?");
        
        Optional<ButtonType> result = alert.showAndWait();
-       if(result.get() == noButton){
-            Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
-            stage.close();
+
+       if(result.get() == ButtonType.CANCEL){
+           alert.close();
             return;
-       }else if(result.get() == yesButton){
+       }else if(result.get() == ButtonType.OK){
         
-       for(Part p : Software1APP.partsToBeAssociated){
+       for(Part p : Software1APP.getPartsToBeAssociated()){
            if(p.getPartID() == idIndex){
-               Software1APP.partsToBeAssociated.remove(p);
+               Software1APP.getPartsToBeAssociated().remove(p);
                break;
            }      
        }
        
     tbl_CurrentContentsAddProduct.refresh();
      
-    ObservableList list = FXCollections.observableArrayList(Software1APP.partsToBeAssociated);
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getPartsToBeAssociated());
     
      coln_CurrentContentsPartID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getPartID()));
      coln_CurrentContentsPartName.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));

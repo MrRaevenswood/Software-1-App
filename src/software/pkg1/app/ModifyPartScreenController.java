@@ -68,15 +68,15 @@ public class ModifyPartScreenController implements Initializable {
        
        for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
 
-           if(Software1APP.getInPart().get(i).partID == idIndex){
-               idToSearch = Software1APP.getInPart().get(i).partID - 1;
+           if(Software1APP.getInPart().get(i).getPartID()== idIndex){
+               idToSearch = Software1APP.getInPart().get(i).getPartID() - 1;
               
                for (int n = 0; n <= Software1APP.getInPart().size() - 1; n++)
                     {
-                        System.out.println(n);
-                        if(Software1APP.getInPart().get(n).partID == idToSearch + 1)
+                        
+                        if(Software1APP.getInPart().get(n).getPartID() == idToSearch + 1)
                         {
-                            System.out.println(n);
+                            
                             machId = Software1APP.getMachIDFromList(n);
                             Software1APP.setCurrentMachIdToModify(machId);
                             break;
@@ -89,13 +89,13 @@ public class ModifyPartScreenController implements Initializable {
        }
        if(idToSearch == -1){
            for(int i = 0; i <= Software1APP.getOutPart().size() - 1; i++){
-                if(Software1APP.getOutPart().get(i).partID == idIndex){
-                    idToSearch = Software1APP.getOutPart().get(i).partID - 1;
+                if(Software1APP.getOutPart().get(i).getPartID() == idIndex){
+                    idToSearch = Software1APP.getOutPart().get(i).getPartID() - 1;
                     
                     for (int n = 0; n <= Software1APP.getOutPart().size() - 1; n++)
                     {
                         
-                        if(Software1APP.getOutPart().get(n).partID == idToSearch + 1)
+                        if(Software1APP.getOutPart().get(n).getPartID() == idToSearch + 1)
                         {
                             Software1APP.setCompanyNameToModify(Software1APP.getCompanyNameFromList(n));
                             break;
@@ -131,11 +131,11 @@ public class ModifyPartScreenController implements Initializable {
            rb_OutsourcedModifyPart.setDisable(true);
        }
        
-       txt_NameModifyPart.setText(Software1APP.getParts().get(idToSearch).name);
-       txt_InvModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).inStock));
-       txt_PriceCostModifyPart.setText(Double.toString(Software1APP.getParts().get(idToSearch).price));
-       txt_MaxModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).max));
-       txt_MinModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).min));
+       txt_NameModifyPart.setText(Software1APP.getParts().get(idToSearch).getName());
+       txt_InvModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).getInStock()));
+       txt_PriceCostModifyPart.setText(Double.toString(Software1APP.getParts().get(idToSearch).getPrice()));
+       txt_MaxModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).getMax()));
+       txt_MinModifyPart.setText(Integer.toString(Software1APP.getParts().get(idToSearch).getMin()));
 
     }
     
@@ -162,13 +162,21 @@ public class ModifyPartScreenController implements Initializable {
        int searchIndex = Software1APP.getSearchIndex();
        int outPartSearchIndex = 0;
        int inPartSearchIndex = 0; 
-       int partId = Software1APP.getParts().get(searchIndex).partID;
+       int partId = Software1APP.getParts().get(searchIndex).getPartID();
        
        int minStock = Integer.parseInt(txt_MinModifyPart.getText());
        int maxStock = Integer.parseInt(txt_MaxModifyPart.getText());
        int inventoryStock = Integer.parseInt(txt_InvModifyPart.getText());
        
-       if(inventoryStock < minStock){
+       if(maxStock <= minStock){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max.");
+           alert.showAndWait();
+           
+           return;
+       }else if(inventoryStock < minStock){
            
            Alert alert = new Alert(Alert.AlertType.ERROR);
            alert.setTitle("Error");
@@ -185,21 +193,13 @@ public class ModifyPartScreenController implements Initializable {
            alert.showAndWait();
            
            return;
-       }else if(maxStock <= minStock){
-           Alert alert = new Alert(Alert.AlertType.ERROR);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
-           alert.setContentText("The minimum cannot be equal or greater than the max.");
-           alert.showAndWait();
-           
-           return;
        }
        
        
        if(rb_InHouseModifyPart.isSelected()){
            
            for(int i = 1; i <= Software1APP.getInPart().size() - 1; i++){
-               if(Software1APP.getInPart().get(i).partID == partId){
+               if(Software1APP.getInPart().get(i).getPartID() == partId){
                    inPartSearchIndex = i;
                    break;
                }
@@ -223,7 +223,7 @@ public class ModifyPartScreenController implements Initializable {
        }else if(rb_OutsourcedModifyPart.isSelected()){
            
            for(int i = 1; i <= Software1APP.getOutPart().size() - 1; i++){
-               if(Software1APP.getOutPart().get(i).partID == partId){
+               if(Software1APP.getOutPart().get(i).getPartID() == partId){
                    outPartSearchIndex = i;
                    break;
                }
@@ -254,17 +254,14 @@ public class ModifyPartScreenController implements Initializable {
    public void cancelModifyPart(){
        
        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
+           alert.setTitle("Warning");
+           alert.setHeaderText("Cancelation Request");
            alert.setContentText("Would you like to stop trying to modify a Part?");
            
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
        
        Optional<ButtonType> result = alert.showAndWait();
        
-       if(result.get() == yesButton){
+       if(result.get() == ButtonType.OK){
             Stage stage = (Stage) btn_CancelModifyPart.getScene().getWindow();
             stage.close();
        }else

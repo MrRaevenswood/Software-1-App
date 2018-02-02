@@ -63,6 +63,7 @@ public class AddPartScreenController implements Initializable{
    
    
    //AddPartScreen events
+   
    @FXML
    public void addPart(){
        
@@ -74,9 +75,17 @@ public class AddPartScreenController implements Initializable{
        if(Software1APP.getParts().isEmpty())
            id = 1;
        else
-           id = Software1APP.getParts().get(Software1APP.getParts().size() - 1).partID + 1;
+           id = Software1APP.getParts().get(Software1APP.getParts().size() - 1).getPartID() + 1;
        
-       if(inventoryStock < minStock){
+       if(maxStock <= minStock){
+           Alert alert = new Alert(AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("The minimum cannot be equal or greater than the max");
+           alert.showAndWait(); 
+
+           return;
+       }else if(inventoryStock < minStock){
            Alert alert = new Alert(AlertType.ERROR);
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
@@ -92,15 +101,7 @@ public class AddPartScreenController implements Initializable{
            alert.showAndWait(); 
            
            return;
-       }else if(maxStock <= minStock){
-           Alert alert = new Alert(AlertType.ERROR);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
-           alert.setContentText("The minimum cannot be equal or greater than the max");
-           alert.showAndWait(); 
-
-           return;
-       }
+       } 
        
        
        
@@ -146,8 +147,8 @@ public class AddPartScreenController implements Initializable{
    public void cancelAddPart(){
       
        Alert alert = new Alert(AlertType.CONFIRMATION);
-       alert.setTitle("Stop Adding Part?");
-       alert.setHeaderText("Part Add Cancel");
+       alert.setTitle("Warning");
+       alert.setHeaderText("Cancellation Request");
        alert.setContentText("Would you like to stop trying to add a Part?");
        
        Optional<ButtonType> result = alert.showAndWait();

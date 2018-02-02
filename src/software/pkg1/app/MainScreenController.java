@@ -74,7 +74,9 @@ public class MainScreenController implements Initializable{
         Parent addPartScreen = FXMLLoader.load(getClass().getResource("AddPartScreen.fxml"));
         Stage stage = new Stage();
         stage.setScene(new Scene(addPartScreen));
-        stage.show();
+        stage.showAndWait();
+        
+        populatePartsTable();
     }
     
    @FXML
@@ -82,19 +84,21 @@ public class MainScreenController implements Initializable{
        Parent addProductScreen = FXMLLoader.load(getClass().getResource("AddProductScreen.fxml"));
        Stage stage = new Stage();
        stage.setScene(new Scene(addProductScreen));
-       stage.show();
+       stage.showAndWait();
+       
+       populateProductsTable();
    }
    
   @FXML
    public void openModifyPartScreen() throws IOException{
-       Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().partID - 1);
+       Software1APP.setSearchIndex(tbl_PARTS.getSelectionModel().getSelectedItem().getPartID() - 1);
        
        Parent modifyPartScreen = FXMLLoader.load(getClass().getResource("ModifyPartScreen.fxml"));
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyPartScreen));
-       stage.show();
+       stage.showAndWait();
        
-       
+       populatePartsTable();
 
    }
    
@@ -105,15 +109,10 @@ public class MainScreenController implements Initializable{
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
            alert.setContentText("Would you like to delete this Product?");
-           alert.showAndWait();
            
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-       
        Optional<ButtonType> result = alert.showAndWait();
        
-       if(result.get() == yesButton){
+       if(result.get() == ButtonType.OK){
            for(Product p : Software1APP.getProducts()){
            if(p.getProductID() == idIndex){
                
@@ -121,21 +120,22 @@ public class MainScreenController implements Initializable{
                   JOptionPane.showMessageDialog(null, "Delete all associated parts before deleting this product");
                   return;
                }
-               Software1APP.myStock.getAllProducts().remove(p);
+               Software1APP.getMyStock().getAllProducts().remove(p);
                break;
                 }
            }
        
-            populateProductsTable();
        }else {
            alert.close();
        }
+       
+       populateProductsTable();
    }
    
    @FXML
    public void deleteSelectedPart(){
        
-       int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().partID;
+       int idIndex = tbl_PARTS.getSelectionModel().getSelectedItem().getPartID();
        int idToSearch = -1;
        int machId = -1;
        
@@ -143,30 +143,24 @@ public class MainScreenController implements Initializable{
            alert.setTitle("Error");
            alert.setHeaderText("Error in App");
            alert.setContentText("Would you like to delete this Part?");
-           alert.showAndWait();
-           
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
        
        Optional<ButtonType> result = alert.showAndWait();
        
-       if(result.get() == noButton){
+       if(result.get() == ButtonType.CANCEL){
            return;
-       }else if (result.get() == yesButton){
+       }else if (result.get() == ButtonType.OK){
        
        for(int i = 0; i <= Software1APP.getInPart().size() - 1; i++){
-           System.out.println("InPart Part ID " + Software1APP.getInPart().get(i).partID);
-           System.out.println("idIndex value" + idIndex);
-           if(Software1APP.getInPart().get(i).partID == idIndex){
-               idToSearch = Software1APP.getInPart().get(i).partID - 1;
+
+           if(Software1APP.getInPart().get(i).getPartID() == idIndex){
+               idToSearch = Software1APP.getInPart().get(i).getPartID() - 1;
                System.out.println("idToSearch Value " + idToSearch);
                for (int n = 0; n <= Software1APP.getInPart().size() - 1; n++)
                     {
-                        System.out.println(n);
-                        if(Software1APP.getInPart().get(n).partID == idToSearch + 1)
+                        
+                        if(Software1APP.getInPart().get(n).getPartID() == idToSearch + 1)
                         {
-                            System.out.println(n);
+                           
                             machId = Software1APP.getMachIDFromList(n);
                             idToSearch = n;
                             break;
@@ -178,14 +172,14 @@ public class MainScreenController implements Initializable{
 
        if(idToSearch == -1){
            for(int i = 0; i <= Software1APP.getOutPart().size() - 1; i++){
-               System.out.println("OutPart Part ID " + Software1APP.getOutPart().get(i).partID);
-                if(Software1APP.getOutPart().get(i).partID == idIndex){
-                    idToSearch = Software1APP.getOutPart().get(i).partID - 1;
+
+                if(Software1APP.getOutPart().get(i).getPartID() == idIndex){
+                    idToSearch = Software1APP.getOutPart().get(i).getPartID() - 1;
                     
                     for (int n = 0; n <= Software1APP.getOutPart().size() - 1; n++)
                     {
                         
-                        if(Software1APP.getOutPart().get(n).partID == idToSearch + 1)
+                        if(Software1APP.getOutPart().get(n).getPartID() == idToSearch + 1)
                         {
                             Software1APP.setCompanyNameToModify(Software1APP.getCompanyNameFromList(n));
                             idToSearch = n;
@@ -201,7 +195,7 @@ public class MainScreenController implements Initializable{
        
        for(int p = 0; p <= Software1APP.getParts().size() - 1; p++){
         
-        if(Software1APP.getParts().get(p).partID == idIndex){
+        if(Software1APP.getParts().get(p).getPartID() == idIndex){
             
             Software1APP.deletePart(p);
             break;
@@ -218,6 +212,8 @@ public class MainScreenController implements Initializable{
        }
    }else
            alert.close(); 
+   
+   populatePartsTable();
        
 }  
    @FXML
@@ -229,7 +225,7 @@ public class MainScreenController implements Initializable{
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
            
-           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           Matcher m = p.matcher(Software1APP.getParts().get(i).getName());
            
            if(m.find()){
                partsFound.add(Software1APP.getParts().get(i));
@@ -258,7 +254,7 @@ public class MainScreenController implements Initializable{
        
        for(int i = 0; i <= Software1APP.getParts().size() - 1; i++){
            
-           Matcher m = p.matcher(Software1APP.getParts().get(i).name);
+           Matcher m = p.matcher(Software1APP.getParts().get(i).getName());
            
            if(m.find()){
                productsFound.add(Software1APP.getParts().get(i));
@@ -286,9 +282,9 @@ public class MainScreenController implements Initializable{
        Parent modifyProductScreen = FXMLLoader.load(getClass().getResource("ModifyProductScreen.fxml"));
        Stage stage = new Stage();
        stage.setScene(new Scene(modifyProductScreen));
-       stage.show();
+       stage.showAndWait();
        
-       
+       populateProductsTable();
    }
    
    @FXML
@@ -311,7 +307,7 @@ public class MainScreenController implements Initializable{
      
     tbl_PRODUCTS.refresh();
     
-    ObservableList list = FXCollections.observableArrayList(Software1APP.myStock.getAllProducts());
+    ObservableList list = FXCollections.observableArrayList(Software1APP.getProducts());
     
     coln_PRODUCTID.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<Integer>(cellData.getValue().getProductID()));
     coln_PRODUCTNAME.setCellValueFactory(cellData -> new ReadOnlyObjectWrapper<String>(cellData.getValue().getName()));
@@ -325,18 +321,14 @@ public class MainScreenController implements Initializable{
    public void closeProgram() throws IOException{
        
        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-           alert.setTitle("Error");
-           alert.setHeaderText("Error in App");
+           alert.setTitle("Warning");
+           alert.setHeaderText("Cancellation Request");
            alert.setContentText("Would you like to close the Program?");
            alert.showAndWait();
-           
-        ButtonType yesButton = new ButtonType("Yes");
-        ButtonType noButton = new ButtonType("No");
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
        
        Optional<ButtonType> result = alert.showAndWait();
        
-       if(result.get() == yesButton){
+       if(result.get() == ButtonType.OK){
            System.exit(0);
        }else
            alert.close();

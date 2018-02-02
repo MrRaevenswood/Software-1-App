@@ -23,10 +23,10 @@ import software.pkg1.app.*;
  */
 public class Software1APP extends Application {
     
-    public static Inventory myStock = new Inventory();
+    private static Inventory myStock = new Inventory();
     private static ArrayList<Inhouse> machIDList = new ArrayList<>();
     private static ArrayList<Outsourced> compNameList = new ArrayList<>();
-    public static ArrayList<Part> partsToBeAssociated = new ArrayList<>();
+    private static ArrayList<Part> partsToBeAssociated = new ArrayList<>();
     private static int searchIndex = 0;
     private static boolean compNameVisible = false;
     private static boolean machIdVisible = false; 
@@ -104,6 +104,10 @@ public class Software1APP extends Application {
         return machIDList.get(index).getMachineID();
     }
     
+    public static Inventory getMyStock(){
+        return myStock;
+    }
+    
     public static String getCompanyNameFromList(int index){
         return compNameList.get(index).getComapnyName();
     }
@@ -115,10 +119,11 @@ public class Software1APP extends Application {
     public static int getSearchIndex(){
         return searchIndex;
     }
-    /**
-     * @param args the command line arguments
-     */
     
+    public static ArrayList<Part> getPartsToBeAssociated(){
+        return partsToBeAssociated;
+    }
+
     public static void setMachIDVisibleCompNameHide(int machId){
         machIdVisible = true;
         compNameVisible = false;
