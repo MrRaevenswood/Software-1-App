@@ -94,4 +94,8 @@ public class Product extends Inventory {
     public int getProductID(){
         return this.productID;
     }
+    
+    public ArrayList<Part> getAssociatedParts(){
+        return associatedParts;
+    }
 }

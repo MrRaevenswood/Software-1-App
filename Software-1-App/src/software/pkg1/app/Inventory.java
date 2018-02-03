@@ -81,4 +81,8 @@ public class Inventory {
     public ArrayList<Part> getAllParts(){
         return allparts;
     }
+    
+    public ArrayList<Product> getAllProducts(){
+        return products;
+    }
 }

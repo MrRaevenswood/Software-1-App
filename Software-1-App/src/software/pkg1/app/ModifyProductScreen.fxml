@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.text.Font?>
 
-
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="596.0" prefWidth="917.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="596.0" prefWidth="917.0" style="-fx-background-color: grey;" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1" fx:controller="software.pkg1.app.ModifyProductScreenController">
    <children>
       <Region layoutX="11.0" layoutY="7.0" prefHeight="576.0" prefWidth="890.0" style="-fx-border-color: black;" />
       <Label layoutX="35.0" layoutY="52.0" text="Modify Product" textFill="#200dc9">
@@ -30,27 +29,27 @@
       <Label layoutX="35.0" layoutY="224.0" text="Price" />
       <Label layoutX="35.0" layoutY="256.0" text="Max" />
       <Label layoutX="175.0" layoutY="256.0" text="Min" />
-      <TableView fx:id="tbl_SearchModifyProduct" layoutX="366.0" layoutY="75.0" prefHeight="166.0" prefWidth="466.0">
+      <TableView fx:id="tbl_SearchModifyProduct" layoutX="366.0" layoutY="75.0" onMouseClicked="#populatePartsToAddToProduct" prefHeight="166.0" prefWidth="466.0">
         <columns>
-          <TableColumn prefWidth="122.0" text="Part ID" />
-          <TableColumn prefWidth="110.0" text="Part Name" />
-            <TableColumn prefWidth="116.0" text="Inventory Level" />
-            <TableColumn prefWidth="117.0" text="Price Per Unit" />
+          <TableColumn fx:id="coln_partIDModifyProduct" prefWidth="122.0" text="Part ID" />
+          <TableColumn fx:id="coln_PartNameModifyProduct" prefWidth="110.0" text="Part Name" />
+            <TableColumn fx:id="coln_InvModifyProduct" prefWidth="116.0" text="Inventory Level" />
+            <TableColumn fx:id="coln_PricePerUnitModifyProduct" prefWidth="117.0" text="Price Per Unit" />
         </columns>
       </TableView>
       <TableView fx:id="tbl_AddModifyProduct" layoutX="366.0" layoutY="296.0" prefHeight="166.0" prefWidth="466.0">
          <columns>
-            <TableColumn prefWidth="122.0" text="Part ID" />
-            <TableColumn prefWidth="110.0" text="Part Name" />
-            <TableColumn prefWidth="116.0" text="Inventory Level" />
-            <TableColumn prefWidth="117.0" text="Price Per Unit" />
+            <TableColumn fx:id="coln_PartIDAddPartToProdinModProd" prefWidth="122.0" text="Part ID" />
+            <TableColumn fx:id="coln_PartNameAddPartToProdinModProd" prefWidth="110.0" text="Part Name" />
+            <TableColumn fx:id="coln_InvLevelAddPartToProdInModProd" prefWidth="116.0" text="Inventory Level" />
+            <TableColumn fx:id="coln_PricePerUnitAddPartToProdInModProd" prefWidth="117.0" text="Price Per Unit" />
          </columns>
       </TableView>
-      <Button fx:id="btn_AddModifyProduct" layoutX="768.0" layoutY="254.0" mnemonicParsing="false" text="Add" />
-      <Button fx:id="btn_DeleteModifyProduct" layoutX="768.0" layoutY="474.0" mnemonicParsing="false" text="Delete" />
-      <Button fx:id="btn_CancelModifyProduct" layoutX="768.0" layoutY="518.0" mnemonicParsing="false" text="Cancel" />
-      <Button fx:id="btn_SaveModifyProduct" layoutX="696.0" layoutY="518.0" mnemonicParsing="false" text="Save" />
-      <Button fx:id="btn_SearchModifyProduct" layoutX="530.0" layoutY="40.0" mnemonicParsing="false" text="Search" />
+      <Button fx:id="btn_AddModifyProduct" layoutX="768.0" layoutY="254.0" mnemonicParsing="false" onAction="#addPartToProduct" text="Add" />
+      <Button fx:id="btn_DeleteModifyProduct" layoutX="768.0" layoutY="474.0" mnemonicParsing="false" onAction="#deleteAssociatedPartinModProd" text="Delete" />
+      <Button fx:id="btn_CancelModifyProduct" layoutX="768.0" layoutY="518.0" mnemonicParsing="false" onAction="#closeModifyProduct" text="Cancel" />
+      <Button fx:id="btn_SaveModifyProduct" layoutX="696.0" layoutY="518.0" mnemonicParsing="false" onAction="#modifyProduct" text="Save" />
+      <Button fx:id="btn_SearchModifyProduct" layoutX="530.0" layoutY="40.0" mnemonicParsing="false" onAction="#findPartsToBeAdded" text="Search" />
       <TextField fx:id="txt_SearchModifyProduct" layoutX="633.0" layoutY="40.0" />
    </children>
 </Pane>

@@ -23,10 +23,16 @@ import software.pkg1.app.*;
  */
 public class Software1APP extends Application {
     
-    public static Inventory myStock = new Inventory();
+    private static Inventory myStock = new Inventory();
     private static ArrayList<Inhouse> machIDList = new ArrayList<>();
     private static ArrayList<Outsourced> compNameList = new ArrayList<>();
+    private static ArrayList<Part> partsToBeAssociated = new ArrayList<>();
     private static int searchIndex = 0;
+    private static boolean compNameVisible = false;
+    private static boolean machIdVisible = false; 
+    private static String currentCompName = ""; 
+    private static int currentMachId = -1; 
+    private static int currentIdToSearch = -1; 
     
     @Override
     public void start(Stage stage) throws Exception {
@@ -50,27 +56,59 @@ public class Software1APP extends Application {
         return myStock.getAllParts();
     }
     
+    public static ArrayList<Product> getProducts(){
+        return myStock.getAllProducts();
+    }
+    
+    public static void deletePart(int index){
+        myStock.getAllParts().remove(index);
+    }
+    
     public static void addInPart(Inhouse newPart){
         machIDList.add(newPart);
+    }
+    
+    public static void deleteOutPart(int index){
+        compNameList.remove(index);
     }
     
     public static void addOutPart(Outsourced newPart){
         compNameList.add(newPart);
     }
     
+    public static void deleteInPart(int index){
+        machIDList.remove(index);
+    }
+    
     public static ArrayList<Inhouse> getInPart(){
         return machIDList;
+    }
+    
+    public static int getMachIdToModify(){
+        return currentMachId;
+    }
+    
+    public static String getCompNameToModify(){
+        return currentCompName;
+    }
+    
+    public static int getIdToSearch(){
+        return currentIdToSearch;
     }
     
     public static ArrayList<Outsourced> getOutPart(){
         return compNameList;
     }
     
-    public static int getMachID(int index){
+    public static int getMachIDFromList(int index){
         return machIDList.get(index).getMachineID();
     }
     
-    public static String getCompanyName(int index){
+    public static Inventory getMyStock(){
+        return myStock;
+    }
+    
+    public static String getCompanyNameFromList(int index){
         return compNameList.get(index).getComapnyName();
     }
     
@@ -81,9 +119,35 @@ public class Software1APP extends Application {
     public static int getSearchIndex(){
         return searchIndex;
     }
-    /**
-     * @param args the command line arguments
-     */
+    
+    public static ArrayList<Part> getPartsToBeAssociated(){
+        return partsToBeAssociated;
+    }
+
+    public static void setMachIDVisibleCompNameHide(int machId){
+        machIdVisible = true;
+        compNameVisible = false;
+        currentMachId = machId;
+    }
+    
+    public static void setCompNameVisibleMachIdHide(int machId){
+        machIdVisible = false;
+        compNameVisible = true;
+        currentMachId = machId;
+    }
+    
+    public static void setCompanyNameToModify(String companyName){
+        currentCompName = companyName;
+    }
+    
+    public static void setIdToSearch(int id){
+        currentIdToSearch = id;
+    }
+    
+    public static void setCurrentMachIdToModify(int mId){
+        currentMachId = mId;
+    }
+    
     public static void main(String[] args) {
         launch(args);
           
