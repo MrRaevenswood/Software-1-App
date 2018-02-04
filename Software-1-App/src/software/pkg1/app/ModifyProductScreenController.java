@@ -345,6 +345,7 @@ public class ModifyProductScreenController implements Initializable {
        Optional<ButtonType> result = alert.showAndWait();
       
        if(result.get() == ButtonType.OK){
+            Software1APP.getPartsToBeAssociated().clear();
             Stage stage = (Stage) btn_CancelModifyProduct.getScene().getWindow();
             stage.close();
        }else

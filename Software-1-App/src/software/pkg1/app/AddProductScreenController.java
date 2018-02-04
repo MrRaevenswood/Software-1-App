@@ -283,6 +283,7 @@ public class AddProductScreenController implements Initializable {
        
        Optional<ButtonType> result = alert.showAndWait();
        if(result.get() == ButtonType.OK){
+            Software1APP.getPartsToBeAssociated().clear();
             Stage stage = (Stage) btn_CancelAddProduct.getScene().getWindow();
             stage.close();
        }else

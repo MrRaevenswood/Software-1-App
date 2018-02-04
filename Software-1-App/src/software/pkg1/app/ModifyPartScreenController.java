@@ -193,6 +193,14 @@ public class ModifyPartScreenController implements Initializable {
            alert.showAndWait();
            
            return;
+       }else if(txt_NameModifyPart.getText().isEmpty()){
+           Alert alert = new Alert(Alert.AlertType.ERROR);
+           alert.setTitle("Error");
+           alert.setHeaderText("Error in App");
+           alert.setContentText("Part must have a name. Please enter a name and try again.");
+           alert.showAndWait();
+           
+           return;
        }
        
        
